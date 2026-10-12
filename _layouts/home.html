@@ -1,0 +1,136 @@
+---
+layout: default
+---
+
+{% comment %}
+  Override of jekyll-theme-chirpy's home layout:
+  - pinned category cards from _data/pinned_categories.yml on the first page
+  - every card has a cover image (falls back to a default banner) and a green border
+{% endcomment %}
+
+{% include lang.html %}
+
+{% assign default_image = '/assets/img/posts/default.svg' %}
+
+<div id="post-list" class="flex-grow-1 px-xl-1">
+  {% if paginator.page == 1 %}
+    {% for pinned in site.data.pinned_categories %}
+      {% assign category_url = pinned.category | slugify | url_encode | prepend: '/categories/' | append: '/' %}
+      <article class="card-wrapper card">
+        <a
+          href="{{ pinned.url | default: category_url | relative_url }}"
+          class="post-preview row g-0 flex-md-row-reverse"
+          style="border: 2px solid var(--color-primary);"
+        >
+          <div class="col-md-5">
+            <div class="preview-img shimmer">
+              <img src="{{ pinned.image | default: default_image | relative_url }}" alt="{{ pinned.title | xml_escape }} Banner" loading="lazy">
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <div class="card-body d-flex flex-column">
+              <h1 class="card-title my-2 mt-md-0">
+                {% if pinned.icon %}
+                  <i class="{{ pinned.icon }} me-2" style="color: var(--color-primary);"></i>
+                {% endif %}
+                {{ pinned.title }}
+              </h1>
+
+              <div class="card-text content mt-0 mb-3">
+                <p>{{ pinned.description }}</p>
+              </div>
+
+              <div class="post-meta flex-grow-1 d-flex align-items-end">
+                <div class="me-auto">
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">{{ pinned.category }}</span>
+                </div>
+                <div class="pin ms-1">
+                  <i class="fas fa-thumbtack fa-fw"></i>
+                  <span>Pinned Category</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </article>
+    {% endfor %}
+  {% endif %}
+
+  {% for post in paginator.posts %}
+    {% if post.hidden %}
+      {% continue %}
+    {% endif %}
+
+    {% assign src = post.image.path | default: post.image | default: default_image %}
+
+    {% if post.media_subpath %}
+      {% unless src contains '://' or src == default_image %}
+        {% assign src = post.media_subpath
+          | append: '/'
+          | append: src
+          | replace: '///', '/'
+          | replace: '//', '/'
+        %}
+      {% endunless %}
+    {% endif %}
+
+    {% assign alt = post.image.alt | xml_escape | default: 'Preview Image' %}
+
+    <article class="card-wrapper card">
+      <a
+        href="{{ post.url | relative_url }}"
+        class="post-preview row g-0 flex-md-row-reverse"
+        style="border: 2px solid var(--color-primary);"
+      >
+        <div class="col-md-5">
+          <div class="preview-img shimmer">
+            <img src="{{ src | relative_url }}" alt="{{ alt }}" loading="lazy">
+          </div>
+        </div>
+
+        <div class="col-md-7">
+          <div class="card-body d-flex flex-column">
+            <h1 class="card-title my-2 mt-md-0">{{ post.title }}</h1>
+
+            <div class="card-text content mt-0 mb-3">
+              <p>{% include post-summary.html %}</p>
+            </div>
+
+            <div class="post-meta flex-grow-1 d-flex align-items-end">
+              <div class="me-auto">
+                <!-- posted date -->
+                <i class="far fa-calendar fa-fw me-1"></i>
+                {% include datetime.html date=post.date lang=lang %}
+
+                <!-- categories -->
+                {% if post.categories.size > 0 %}
+                  <i class="far fa-folder-open fa-fw me-1"></i>
+                  <span class="categories">
+                    {% for category in post.categories %}
+                      {{ category }}
+                      {%- unless forloop.last -%},{%- endunless -%}
+                    {% endfor %}
+                  </span>
+                {% endif %}
+              </div>
+
+              <div class="pin ms-1">
+                <i class="fas fa-thumbtack fa-fw"></i>
+                <span>{% if post.pin %}{{ site.data.locales[lang].post.pin_prompt }}{% endif %}</span>
+              </div>
+            </div>
+            <!-- .post-meta -->
+          </div>
+          <!-- .card-body -->
+        </div>
+      </a>
+    </article>
+  {% endfor %}
+</div>
+<!-- #post-list -->
+
+{% if paginator.total_pages > 1 %}
+  {% include post-paginator.html %}
+{% endif %}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="t" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b3b3f"/><stop offset="1" stop-color="#11a1a8"/></linearGradient>
+    <radialGradient id="c" cx="40%" cy="55%" r="40%"><stop offset="0" stop-color="#7ff7ff" stop-opacity=".6"/><stop offset="1" stop-color="#7ff7ff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#t)"/>
+  <rect width="1200" height="630" fill="url(#c)"/>
+  <g transform="translate(480 320)" fill="none" stroke="#e6fdff" stroke-width="12">
+    <circle r="160"/><circle r="100" stroke-opacity=".7"/><circle r="40" fill="#e6fdff" fill-opacity=".25"/>
+    <path d="M-220 0H-160M160 0H220M0 -220V-160M0 160V220" stroke-linecap="round"/>
+  </g>
+  <text x="1150" y="110" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="84" font-weight="800" fill="#fff">SOC</text>
+  <text x="1150" y="190" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="600" fill="#bff6f8">study notes</text>
+</svg>

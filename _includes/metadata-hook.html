@@ -1,0 +1,193 @@
+<!-- Custom theme overrides (injected into <head> by Chirpy) -->
+<style>
+  :root {
+    --color-primary: #79ae6f;
+    --color-accent: #9fcb98;
+    --color-pale: #f2edc2;
+    --color-dark: #346739;
+    --overlay: rgba(9, 16, 10, 0.65);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Optional custom cursor: drop a .cur file at /assets/img/cursor.cur and uncomment */
+  /*
+  html, body { cursor: url('/assets/img/cursor.cur'), auto !important; }
+  a, button, .btn, .nav-link, .card, .tag { cursor: url('/assets/img/cursor.cur'), pointer !important; }
+  */
+
+  /* Text emphasis & links */
+  strong, b, em { color: var(--color-accent) !important; }
+  a { color: var(--color-primary) !important; }
+  a:hover { color: var(--color-accent) !important; }
+
+  /* Blockquotes & prompts */
+  blockquote, .prompt-info, .prompt-tip, .prompt-warning, .prompt-danger {
+    background-color: rgba(121, 174, 111, 0.15) !important;
+    border-left-color: var(--color-primary) !important;
+    border-radius: 6px !important;
+    color: inherit !important;
+  }
+  .prompt-info::before, .prompt-tip::before, .prompt-warning::before, .prompt-danger::before {
+    color: var(--color-primary) !important;
+  }
+  .prompt-info em, .prompt-tip em, .prompt-warning em, .prompt-danger em { color: inherit !important; }
+
+  /* Fixed background image with a dark green overlay */
+  html {
+    background: url('/assets/img/bg/bg.svg') center / cover no-repeat fixed !important;
+  }
+  body { background: transparent !important; position: relative; }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-color: var(--overlay);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Let the background show through the layout */
+  body, main, .main-wrapper, .container, .container-xl, .topbar, .navbar,
+  header, nav, footer, .footer, #panel-wrapper, .access, .toc-border-cover {
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* TOC gradient masks clash with the background image */
+  #toc-wrapper::before, #toc-wrapper::after, .toc-border-cover, #toc-popup::after { display: none !important; }
+  #toc-wrapper { margin-top: 3rem !important; }
+
+  /* Readability */
+  body, p, .post-content p, .card-text, .post-content li {
+    font-weight: 500 !important;
+    color: #e8eee7 !important;
+    letter-spacing: 0.2px;
+  }
+
+  #notification { z-index: 9999 !important; }
+
+  /* Sidebar navigation */
+  .nav-link { transition: all 0.3s var(--ease) !important; }
+  .nav-item.active > .nav-link,
+  .nav-item.active > .nav-link:hover {
+    background-color: var(--color-primary) !important;
+    color: var(--color-pale) !important;
+    border-radius: 8px;
+    font-weight: 600;
+    transform: none !important;
+  }
+  .nav-link:hover:not(.active) {
+    background-color: rgba(121, 174, 111, 0.25) !important;
+    border-radius: 8px;
+    color: #8ce07d !important;
+    font-weight: 600 !important;
+  }
+
+  .sidebar-bottom a {
+    color: var(--color-primary) !important;
+    transition: all 0.3s var(--ease) !important;
+  }
+  .sidebar-bottom a:hover {
+    color: var(--color-accent) !important;
+    transform: scale(1.2) rotate(5deg) !important;
+  }
+
+  /* Buttons */
+  .btn, .post-navigation .btn {
+    background-color: rgba(121, 174, 111, 0.15) !important;
+    border: 1px solid var(--color-primary) !important;
+    color: var(--color-primary) !important;
+    border-radius: 8px;
+    transition: all 0.3s var(--ease) !important;
+  }
+  .btn:hover, .post-navigation .btn:hover {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 20px rgba(121, 174, 111, 0.4) !important;
+  }
+
+  /* Tags */
+  .tag {
+    background-color: rgba(121, 174, 111, 0.15) !important;
+    color: var(--color-primary) !important;
+    border: 1px solid var(--color-primary) !important;
+    border-radius: 6px;
+    transition: all 0.3s var(--ease) !important;
+  }
+  .tag:hover, .tag:hover:focus, .tag:hover:active {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    transform: scale(1.08) !important;
+    box-shadow: 0 4px 12px rgba(121, 174, 111, 0.4) !important;
+  }
+
+  /* No blue focus rings */
+  a:focus, a:focus-visible, a:active,
+  .tag:focus, .tag:focus-visible, .tag:active,
+  .btn:focus, .btn:focus-visible, .btn:active,
+  button:focus, button:focus-visible, button:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Card hover lift */
+  .post-preview, .card { transition: all 0.3s var(--ease) !important; }
+  .post-preview:hover, .card:hover {
+    transform: translateY(-4px) !important;
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 10px 24px rgba(121, 174, 111, 0.3) !important;
+  }
+
+  /* Home cards: fixed height with cover image on the right */
+  @media (min-width: 768px) {
+    .post-preview { height: 200px; overflow: hidden; }
+  }
+  .post-preview .col-md-5 img { object-fit: cover; width: 100%; height: 100%; }
+
+  /* Mobile & tablet */
+  @media (max-width: 1024px) {
+    main { padding: 1rem !important; }
+    .post-preview, .card { margin: 0.5rem 0 !important; }
+    .tag { font-size: 0.85rem !important; padding: 0.25rem 0.5rem !important; }
+
+    .btn, .btn-primary, button, [class*="btn"], input, textarea, .form-control,
+    .search-input, .search-box, .sidebar-toggle, .topbar-toggle, .nav-toggle {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: var(--color-pale) !important;
+    }
+    .btn:hover, .btn-primary:hover, button:hover, [class*="btn"]:hover, input:hover,
+    textarea:hover, .form-control:hover, .search-input:hover, .search-box:hover,
+    .sidebar-toggle:hover, .topbar-toggle:hover, .nav-toggle:hover {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: var(--color-accent) !important;
+      transform: scale(1.05) !important;
+    }
+  }
+
+  /* Rouge: don't paint special characters as errors */
+  .highlight .err { color: inherit !important; background-color: transparent !important; }
+
+  /* Notion-style callouts: wrap content in <aside> */
+  .post-content aside, article aside {
+    display: block !important;
+    background-color: rgba(121, 174, 111, 0.1) !important;
+    border-left: 4px solid var(--color-primary) !important;
+    padding: 1.2rem 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 8px !important;
+    font-size: 0.95rem !important;
+    color: var(--color-pale) !important;
+  }
+</style>

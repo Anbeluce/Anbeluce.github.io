@@ -1,0 +1,138 @@
+# Pages CMS configuration — https://pagescms.org/docs/configuration/
+# Open https://app.pagescms.org, sign in with GitHub and pick this repository.
+# Every save is a commit; GitHub Actions then rebuilds the site.
+
+media:
+  input: assets/img
+  output: /assets/img
+  categories: [image]
+  rename: safe
+
+content:
+  - name: posts
+    label: Bài viết
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{title}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, date, categories]
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Tiêu đề
+        type: string
+        required: true
+      - name: description
+        label: Mô tả ngắn (hiện trên card trang chủ)
+        type: text
+      - name: date
+        label: Ngày đăng
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd HH:mm:ss xx"
+      - name: categories
+        label: Danh mục
+        description: "Tối đa 2 cấp: mục cha rồi mục con, ví dụ: Cyber Defenders → Threat Hunting"
+        type: string
+        list: true
+      - name: tags
+        label: Tags
+        description: "Viết thường, nối bằng dấu gạch ngang, ví dụ: endpoint-forensics"
+        type: string
+        list: true
+      - name: image
+        label: Ảnh bìa
+        type: object
+        fields:
+          - name: path
+            label: Ảnh
+            type: image
+            options:
+              path: assets/img/posts
+          - name: alt
+            label: Mô tả ảnh
+            type: string
+      - name: pin
+        label: Ghim lên đầu trang chủ
+        type: boolean
+      - name: body
+        label: Nội dung (Markdown)
+        type: code
+        options:
+          format: markdown
+
+  - name: about
+    label: Trang About
+    type: file
+    path: _tabs/about.md
+    format: yaml-frontmatter
+    fields:
+      - name: icon
+        type: string
+        hidden: true
+      - name: order
+        type: number
+        hidden: true
+      - name: body
+        label: Nội dung (Markdown)
+        type: code
+        options:
+          format: markdown
+
+  - name: pinned_categories
+    label: Card ghim trang chủ
+    type: file
+    path: _data/pinned_categories.yml
+    format: yaml
+    list: true
+    fields:
+      - name: title
+        label: Tiêu đề
+        type: string
+        required: true
+      - name: icon
+        label: Icon Font Awesome
+        description: "Ví dụ: fas fa-shield-halved — tra icon tại fontawesome.com/icons"
+        type: string
+      - name: category
+        label: Danh mục liên kết
+        description: Phải trùng với tên danh mục dùng trong bài viết
+        type: string
+        required: true
+      - name: description
+        label: Mô tả
+        type: text
+      - name: image
+        label: Ảnh bìa
+        type: image
+        options:
+          path: assets/img/posts
+
+  - name: contact
+    label: Icon mạng xã hội (sidebar)
+    type: file
+    path: _data/contact.yml
+    format: yaml
+    list: true
+    fields:
+      - name: type
+        label: Tên
+        type: string
+        required: true
+      - name: icon
+        label: Icon Font Awesome
+        type: string
+      - name: url
+        label: Link
+        description: Để trống với github/email (lấy từ _config.yml)
+        type: string
+      - name: noblank
+        label: Mở trong tab hiện tại
+        type: boolean
