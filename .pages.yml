@@ -1,12 +1,47 @@
 # Pages CMS configuration — https://pagescms.org/docs/configuration/
 # Open https://app.pagescms.org, sign in with GitHub and pick this repository.
 # Every save is a commit; GitHub Actions then rebuilds the site.
+#
+# Saving a "file" entry (about, pinned_categories, contact, status, theme)
+# rewrites it from this schema, so any YAML comment in those files is lost on
+# the next save — put explanations in a field's `description` instead, which
+# shows in the editor and never touches the file.
+
+settings:
+  commit:
+    # {path} is the file touched; the rest are the defaults Pages CMS fills in.
+    templates:
+      create: "post: add {filename} (Pages CMS)"
+      update: "post: update {filename} (Pages CMS)"
+      delete: "post: remove {filename} (Pages CMS)"
+      rename: "post: rename {oldPath} -> {newPath} (Pages CMS)"
 
 media:
   input: assets/img
   output: /assets/img
   categories: [image, video, audio, document, font]
   rename: safe
+  commit:
+    templates:
+      create: "media: add {filename} (Pages CMS)"
+      update: "media: replace {filename} (Pages CMS)"
+      delete: "media: remove {filename} (Pages CMS)"
+      rename: "media: rename {oldPath} -> {newPath} (Pages CMS)"
+
+# Reusable field group for a post's cover image, shared by both post collections below.
+components:
+  cover_image:
+    type: object
+    label: Ảnh bìa
+    fields:
+      - name: path
+        label: Ảnh
+        type: image
+        options:
+          path: assets/img/posts
+      - name: alt
+        label: Mô tả ảnh
+        type: string
 
 content:
   # Visual editor for writing on a phone. Use "Bài viết" (Markdown) for posts with theme-specific syntax.
@@ -47,17 +82,7 @@ content:
         type: string
         list: true
       - name: image
-        label: Ảnh bìa
-        type: object
-        fields:
-          - name: path
-            label: Ảnh
-            type: image
-            options:
-              path: assets/img/posts
-          - name: alt
-            label: Mô tả ảnh
-            type: string
+        component: cover_image
       - name: pin
         label: Ghim lên đầu trang chủ
         type: boolean
@@ -109,17 +134,7 @@ content:
         type: string
         list: true
       - name: image
-        label: Ảnh bìa
-        type: object
-        fields:
-          - name: path
-            label: Ảnh
-            type: image
-            options:
-              path: assets/img/posts
-          - name: alt
-            label: Mô tả ảnh
-            type: string
+        component: cover_image
       - name: pin
         label: Ghim lên đầu trang chủ
         type: boolean
@@ -134,6 +149,8 @@ content:
     type: file
     path: _tabs/about.md
     format: yaml-frontmatter
+    operations:
+      delete: false # the theme's About tab needs this file to exist
     fields:
       - name: icon
         type: string
@@ -153,6 +170,8 @@ content:
     path: _data/pinned_categories.yml
     format: yaml
     list: true
+    operations:
+      delete: false # the home layout reads this file; delete the rows inside instead
     fields:
       - name: title
         label: Tiêu đề
@@ -182,6 +201,8 @@ content:
     path: _data/contact.yml
     format: yaml
     list: true
+    operations:
+      delete: false # the sidebar reads this file; delete the rows inside instead
     fields:
       - name: type
         label: Tên
@@ -203,6 +224,8 @@ content:
     type: file
     path: _data/status.yml
     format: yaml
+    operations:
+      delete: false # the online-status include reads this file
     fields:
       - name: enabled
         label: Hiện khung trạng thái dưới tên blog
@@ -238,6 +261,8 @@ content:
     type: file
     path: _data/theme.yml
     format: yaml
+    operations:
+      delete: false # the theme-settings plugin and CSS read this file
     fields:
       - name: title
         label: Tên blog
