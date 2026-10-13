@@ -1,13 +1,13 @@
 # My Blog
 
-Blog Jekyll dùng theme [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) (MIT), tùy biến tông xanh lá + ảnh nền.
+Blog Jekyll dùng theme [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) (MIT), tùy biến tông vàng + ảnh nền.
 
 ## Tùy biến chính
 
 | File | Nội dung |
 | --- | --- |
 | `_config.yml` | Tên site, tagline, avatar, timezone, social, `theme_mode: dark`, `paginate` |
-| `_includes/metadata-hook.html` | Toàn bộ CSS tùy biến (màu, ảnh nền + lớp phủ, hover nút/tag/card, nav active, callout `<aside>`) |
+| `_includes/metadata-hook.html` | Toàn bộ CSS tùy biến (màu vàng chủ đạo ở `--color-primary`, ảnh nền + lớp phủ, hover nút/tag/card, nav active, callout `<aside>`) |
 | `_layouts/home.html` | Trang chủ: card ghim danh mục, card có ảnh bìa + viền xanh |
 | `_data/pinned_categories.yml` | Các card "Pinned Category" ở đầu trang chủ |
 | `_data/contact.yml` | Icon mạng xã hội ở cuối sidebar |

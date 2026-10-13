@@ -1,18 +1,10 @@
 # Category cards pinned to the top of the home page (first page only).
 # `category` must match a category name used in your posts' front matter.
 
-- title: Blue Team Lab Writeups
-  icon: fas fa-shield-halved
-  category: Cyber Defenders
+- title: Bắt đầu tại đây
+  icon: fas fa-pen-nib
+  category: Getting Started
   description: >-
-    Danh mục tổng hợp các writeup lab thực hành Blue Team: forensics,
-    threat hunting và malware analysis. Bấm để xem toàn bộ.
-  image: /assets/img/posts/blue-team-labs.svg
-
-- title: SOC Analyst Study Notes
-  icon: fas fa-cube
-  category: HTB SOC Jobpath
-  description: >-
-    Ghi chú học tập, bài tập thực hành và kinh nghiệm rút ra trong
-    quá trình theo lộ trình SOC Analyst.
-  image: /assets/img/posts/soc-notes.svg
+    Hướng dẫn đăng bài trên blog: dùng dashboard Pages CMS hoặc tạo file
+    Markdown, cùng các định dạng có thể dùng trong bài.
+  image: /assets/img/posts/getting-started.svg

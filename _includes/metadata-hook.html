@@ -1,11 +1,12 @@
 <!-- Custom theme overrides (injected into <head> by Chirpy) -->
 <style>
   :root {
-    --color-primary: #79ae6f;
-    --color-accent: #9fcb98;
-    --color-pale: #f2edc2;
-    --color-dark: #346739;
-    --overlay: rgba(9, 16, 10, 0.65);
+    --color-primary: #f2c230;
+    --color-accent: #ffdc6b;
+    --color-pale: #fff4d1;
+    --color-dark: #8a6d0f;
+    --on-primary: #1b1505; /* text on yellow backgrounds */
+    --overlay: rgba(14, 12, 6, 0.68);
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -22,7 +23,7 @@
 
   /* Blockquotes & prompts */
   blockquote, .prompt-info, .prompt-tip, .prompt-warning, .prompt-danger {
-    background-color: rgba(121, 174, 111, 0.15) !important;
+    background-color: rgba(242, 194, 48, 0.15) !important;
     border-left-color: var(--color-primary) !important;
     border-radius: 6px !important;
     color: inherit !important;
@@ -61,7 +62,7 @@
   /* Readability */
   body, p, .post-content p, .card-text, .post-content li {
     font-weight: 500 !important;
-    color: #e8eee7 !important;
+    color: #f1ede4 !important;
     letter-spacing: 0.2px;
   }
 
@@ -72,15 +73,15 @@
   .nav-item.active > .nav-link,
   .nav-item.active > .nav-link:hover {
     background-color: var(--color-primary) !important;
-    color: var(--color-pale) !important;
+    color: var(--on-primary) !important;
     border-radius: 8px;
     font-weight: 600;
     transform: none !important;
   }
   .nav-link:hover:not(.active) {
-    background-color: rgba(121, 174, 111, 0.25) !important;
+    background-color: rgba(242, 194, 48, 0.25) !important;
     border-radius: 8px;
-    color: #8ce07d !important;
+    color: #ffd447 !important;
     font-weight: 600 !important;
   }
 
@@ -95,7 +96,7 @@
 
   /* Buttons */
   .btn, .post-navigation .btn {
-    background-color: rgba(121, 174, 111, 0.15) !important;
+    background-color: rgba(242, 194, 48, 0.15) !important;
     border: 1px solid var(--color-primary) !important;
     color: var(--color-primary) !important;
     border-radius: 8px;
@@ -104,16 +105,16 @@
   .btn:hover, .post-navigation .btn:hover {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
-    color: #fff !important;
+    color: var(--on-primary) !important;
     font-weight: 700 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    text-shadow: none !important;
     transform: translateY(-3px) !important;
-    box-shadow: 0 8px 20px rgba(121, 174, 111, 0.4) !important;
+    box-shadow: 0 8px 20px rgba(242, 194, 48, 0.4) !important;
   }
 
   /* Tags */
   .tag {
-    background-color: rgba(121, 174, 111, 0.15) !important;
+    background-color: rgba(242, 194, 48, 0.15) !important;
     color: var(--color-primary) !important;
     border: 1px solid var(--color-primary) !important;
     border-radius: 6px;
@@ -122,11 +123,11 @@
   .tag:hover, .tag:hover:focus, .tag:hover:active {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
-    color: #fff !important;
+    color: var(--on-primary) !important;
     font-weight: 700 !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5) !important;
+    text-shadow: none !important;
     transform: scale(1.08) !important;
-    box-shadow: 0 4px 12px rgba(121, 174, 111, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(242, 194, 48, 0.4) !important;
   }
 
   /* No blue focus rings */
@@ -143,7 +144,7 @@
   .post-preview:hover, .card:hover {
     transform: translateY(-4px) !important;
     border-color: var(--color-primary) !important;
-    box-shadow: 0 10px 24px rgba(121, 174, 111, 0.3) !important;
+    box-shadow: 0 10px 24px rgba(242, 194, 48, 0.3) !important;
   }
 
   /* Home cards: fixed height with cover image on the right */
@@ -182,7 +183,7 @@
   /* Notion-style callouts: wrap content in <aside> */
   .post-content aside, article aside {
     display: block !important;
-    background-color: rgba(121, 174, 111, 0.1) !important;
+    background-color: rgba(242, 194, 48, 0.1) !important;
     border-left: 4px solid var(--color-primary) !important;
     padding: 1.2rem 1.5rem !important;
     margin: 1.5rem 0 !important;

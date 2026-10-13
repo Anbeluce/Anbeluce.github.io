@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs><linearGradient id="y" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2c230"/><stop offset="1" stop-color="#d99a0b"/></linearGradient></defs>
+  <rect width="1200" height="630" fill="url(#y)"/>
+  <g transform="translate(110 150)" fill="none" stroke="#1b1505" stroke-width="12" stroke-linejoin="round" stroke-linecap="round">
+    <rect x="0" y="0" width="150" height="190" rx="14"/>
+    <path d="M30 50h90M30 90h90M30 130h55"/>
+    <path d="M170 150l70-70 30 30-70 70h-30z"/>
+  </g>
+  <text x="440" y="270" font-family="Segoe UI, Arial, sans-serif" font-size="92" font-weight="800" fill="#1b1505">Bắt đầu</text>
+  <text x="440" y="370" font-family="Segoe UI, Arial, sans-serif" font-size="92" font-weight="800" fill="#1b1505">tại đây</text>
+  <text x="440" y="450" font-family="Segoe UI, Arial, sans-serif" font-size="44" font-weight="600" fill="#3d2f06">Hướng dẫn đăng bài</text>
+</svg>
