@@ -1,12 +1,17 @@
+{%- assign theme = site.data.theme -%}
+{%- assign primary = theme.primary_color | default: '#f2c230' -%}
+{%- assign accent = theme.accent_color | default: '#ffdc6b' -%}
+{%- assign overlay = theme.overlay | default: 0.68 -%}
+{%- assign background = theme.background | default: '/assets/img/bg/bg.svg' -%}
 <!-- Custom theme overrides (injected into <head> by Chirpy) -->
 <style>
   :root {
-    --color-primary: #f2c230;
-    --color-accent: #ffdc6b;
+    --color-primary: {{ primary }};
+    --color-accent: {{ accent }};
     --color-pale: #fff4d1;
     --color-dark: #8a6d0f;
-    --on-primary: #1b1505; /* text on yellow backgrounds */
-    --overlay: rgba(14, 12, 6, 0.68);
+    --on-primary: {{ theme.on_primary | default: "#1b1505" }}; /* text on primary-colored backgrounds, set by _plugins/theme-settings.rb */
+    --overlay: rgba(14, 12, 6, {{ overlay }});
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -23,7 +28,7 @@
 
   /* Blockquotes & prompts */
   blockquote, .prompt-info, .prompt-tip, .prompt-warning, .prompt-danger {
-    background-color: rgba(242, 194, 48, 0.15) !important;
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
     border-left-color: var(--color-primary) !important;
     border-radius: 6px !important;
     color: inherit !important;
@@ -35,7 +40,7 @@
 
   /* Fixed background image with a dark green overlay */
   html {
-    background: url('/assets/img/bg/bg.svg') center / cover no-repeat fixed !important;
+    background: url('{{ background | relative_url }}') center / cover no-repeat fixed !important;
   }
   body { background: transparent !important; position: relative; }
   body::before {
@@ -79,7 +84,7 @@
     transform: none !important;
   }
   .nav-link:hover:not(.active) {
-    background-color: rgba(242, 194, 48, 0.25) !important;
+    background-color: color-mix(in srgb, var(--color-primary) 25%, transparent) !important;
     border-radius: 8px;
     color: #ffd447 !important;
     font-weight: 600 !important;
@@ -96,7 +101,7 @@
 
   /* Buttons */
   .btn, .post-navigation .btn {
-    background-color: rgba(242, 194, 48, 0.15) !important;
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
     border: 1px solid var(--color-primary) !important;
     color: var(--color-primary) !important;
     border-radius: 8px;
@@ -109,12 +114,12 @@
     font-weight: 700 !important;
     text-shadow: none !important;
     transform: translateY(-3px) !important;
-    box-shadow: 0 8px 20px rgba(242, 194, 48, 0.4) !important;
+    box-shadow: 0 8px 20px color-mix(in srgb, var(--color-primary) 40%, transparent) !important;
   }
 
   /* Tags */
   .tag {
-    background-color: rgba(242, 194, 48, 0.15) !important;
+    background-color: color-mix(in srgb, var(--color-primary) 15%, transparent) !important;
     color: var(--color-primary) !important;
     border: 1px solid var(--color-primary) !important;
     border-radius: 6px;
@@ -127,7 +132,7 @@
     font-weight: 700 !important;
     text-shadow: none !important;
     transform: scale(1.08) !important;
-    box-shadow: 0 4px 12px rgba(242, 194, 48, 0.4) !important;
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--color-primary) 40%, transparent) !important;
   }
 
   /* No blue focus rings */
@@ -144,7 +149,7 @@
   .post-preview:hover, .card:hover {
     transform: translateY(-4px) !important;
     border-color: var(--color-primary) !important;
-    box-shadow: 0 10px 24px rgba(242, 194, 48, 0.3) !important;
+    box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 30%, transparent) !important;
   }
 
   /* Home cards: fixed height with cover image on the right */
@@ -183,7 +188,7 @@
   /* Notion-style callouts: wrap content in <aside> */
   .post-content aside, article aside {
     display: block !important;
-    background-color: rgba(242, 194, 48, 0.1) !important;
+    background-color: color-mix(in srgb, var(--color-primary) 10%, transparent) !important;
     border-left: 4px solid var(--color-primary) !important;
     padding: 1.2rem 1.5rem !important;
     margin: 1.5rem 0 !important;

@@ -5,7 +5,7 @@
 media:
   input: assets/img
   output: /assets/img
-  categories: [image]
+  categories: [image, video, audio, document, font]
   rename: safe
 
 content:
@@ -232,3 +232,46 @@ content:
           - name: show_activity
             label: Hiện đang chơi game / nghe Spotify / custom status
             type: boolean
+
+  - name: theme
+    label: Giao diện & thông tin site
+    type: file
+    path: _data/theme.yml
+    format: yaml
+    fields:
+      - name: title
+        label: Tên blog
+        type: string
+      - name: tagline
+        label: Tagline (dòng dưới tên blog)
+        type: string
+      - name: description
+        label: Mô tả site (hiện trên Google, khi chia sẻ link)
+        type: text
+      - name: author
+        label: Tên tác giả (chân trang)
+        type: string
+      - name: avatar
+        label: Avatar
+        type: image
+        options:
+          path: assets/img
+      - name: background
+        label: Ảnh nền
+        type: image
+        options:
+          path: assets/img/bg
+      - name: overlay
+        label: Độ tối phủ lên ảnh nền
+        description: "Từ 0 (không phủ) đến 1 (đen hẳn). Mặc định 0.68"
+        type: number
+      - name: primary_color
+        label: Màu chủ đạo
+        description: "Mã màu hex, ví dụ #f2c230 (vàng), #4f8cff (xanh dương), #ff5c8a (hồng)"
+        type: string
+        pattern: "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+      - name: accent_color
+        label: Màu phụ (chữ đậm, link khi rê chuột)
+        description: Thường là bản sáng hơn của màu chủ đạo
+        type: string
+        pattern: "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
