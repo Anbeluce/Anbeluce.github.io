@@ -207,8 +207,9 @@
       }
     }
 
-    function loadDiscord() {
-      if (document.hidden) return;
+    /* Always fetch on first load; skip the periodic refresh while the tab is hidden */
+    function loadDiscord(force) {
+      if (document.hidden && force !== true) return;
       fetch('https://api.lanyard.rest/v1/users/' + encodeURIComponent(dc.user_id))
         .then(function (res) { return res.json(); })
         .then(function (json) {
@@ -226,7 +227,7 @@
 
     if (dc.enabled && dc.user_id) {
       box.appendChild(dcRow);
-      loadDiscord();
+      loadDiscord(true);
       setInterval(loadDiscord, 30 * 1000);
       document.addEventListener('visibilitychange', loadDiscord);
     }
