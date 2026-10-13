@@ -36,7 +36,8 @@ content:
         required: true
         options:
           time: true
-          format: "yyyy-MM-dd HH:mm:ss xx"
+          # No offset: Jekyll applies `timezone` from _config.yml (Asia/Ho_Chi_Minh)
+          format: "yyyy-MM-dd HH:mm:ss"
       - name: categories
         label: Danh mục
         description: "Tối đa 2 cấp: mục cha rồi mục con, ví dụ: Cyber Defenders → Threat Hunting"

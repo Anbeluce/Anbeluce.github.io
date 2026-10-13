@@ -31,3 +31,6 @@ assets/js/dist
 .DS_Store
 Thumbs.db
 .claude/
+
+# Playwright MCP output
+.playwright-mcp/
