@@ -29,7 +29,7 @@ image:
 | Ghim | Đưa bài lên đầu trang chủ |
 | Nội dung | Viết bằng Markdown (xem phần dưới) |
 
-4. Bấm **Save**. Khoảng 1–2 phút sau bài sẽ lên site.
+4\. Bấm **Save**. Khoảng 1–2 phút sau bài sẽ lên site.
 
 > Nếu đặt **ngày đăng ở tương lai**, bài sẽ bị ẩn cho tới khi có lần build sau thời điểm đó.
 {: .prompt-warning }
