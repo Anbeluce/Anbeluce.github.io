@@ -60,6 +60,31 @@ Mục này cho gõ Markdown thô trực tiếp — chính là những gì bạn 
 > Mẹo: trong mục ⭐ Viết bài, khung soạn có nút chuyển **Editor / Source** ở góc. Bấm **Source** là gõ được Markdown thô y như mục nâng cao, không cần đổi mục.
 > {: .prompt-tip }
 
+## Gõ tắt trong khung soạn trực quan
+
+Nút **/** chỉ liệt kê một phần. Phần lớn ký hiệu Markdown bên dưới gõ thẳng vào bài là tự đổi định dạng ngay, không cần mở menu nào cả — mình đã thử từng cái trong bảng này trực tiếp trên dashboard.
+
+| Gõ | Ra kết quả |
+| --- | --- |
+| `**chữ**` | **In đậm** |
+| `*chữ*` | *In nghiêng* |
+| `~~chữ~~` | ~~Gạch ngang~~ |
+| `` `chữ` `` | `Code ngắn` |
+| `# `, `## `, `### ` đầu dòng | Tiêu đề lớn/vừa/nhỏ |
+| `- ` đầu dòng | Danh sách gạch đầu dòng |
+| `1. ` đầu dòng | Danh sách đánh số |
+| `> ` đầu dòng | Khung trích dẫn |
+| ` ``` ` rồi Enter | Khối code (gõ ` ```js ` để tô màu đúng ngôn ngữ) |
+| `---` rồi Enter | Đường kẻ ngang |
+| Bôi đen chữ | Hiện thanh công cụ nhỏ: đậm, nghiêng, gạch chân, gạch ngang, code, chèn link |
+
+Bôi đen một đoạn xong gõ **Ctrl+K** là chèn link nhanh, không cần bấm nút.
+
+**Không có trong khung soạn trực quan**, chỉ làm được ở chế độ **Source** hoặc mục **Bài viết (nâng cao)**:
+
+- Checklist (`- [ ]`)
+- Khung ghi chú màu (info/tip/warning/danger) và callout `<aside>` của theme — đây là cú pháp riêng của Chirpy, không phải Markdown chuẩn, nên không engine soạn trực quan nào hiểu được.
+
 ## Định dạng có thể dùng trong bài
 
 ### Chữ và danh sách
