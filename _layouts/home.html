@@ -58,10 +58,48 @@ layout: default
     {% endfor %}
   {% endif %}
 
-  {% for post in paginator.posts %}
-    {% if post.hidden %}
-      {% continue %}
+  {% comment %} Pinned posts first, then the rest by date (same paging logic as Chirpy) {% endcomment %}
+  {% assign all_pinned = site.posts | where: 'pin', 'true' %}
+  {% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
+  {% assign posts = '' | split: '' %}
+
+  {% assign visible_start = paginator.page | minus: 1 | times: paginator.per_page %}
+  {% assign visible_end = visible_start | plus: paginator.per_page %}
+
+  {% if all_pinned.size > visible_start %}
+    {% if all_pinned.size > visible_end %}
+      {% assign pinned_size = paginator.per_page %}
+    {% else %}
+      {% assign pinned_size = all_pinned.size | minus: visible_start %}
     {% endif %}
+
+    {% for i in (visible_start..all_pinned.size) limit: pinned_size %}
+      {% assign posts = posts | push: all_pinned[i] %}
+    {% endfor %}
+  {% else %}
+    {% assign pinned_size = 0 %}
+  {% endif %}
+
+  {% assign normal_size = paginator.posts | size | minus: pinned_size %}
+
+  {% if normal_size > 0 %}
+    {% if pinned_size > 0 %}
+      {% assign normal_start = 0 %}
+    {% else %}
+      {% assign normal_start = visible_start | minus: all_pinned.size %}
+    {% endif %}
+
+    {% assign normal_end = normal_start | plus: normal_size | minus: 1 %}
+
+    {% for i in (normal_start..normal_end) %}
+      {% assign posts = posts | push: all_normal[i] %}
+    {% endfor %}
+  {% endif %}
+
+  {% for post in posts %}
+    {% unless post %}
+      {% continue %}
+    {% endunless %}
 
     {% assign src = post.image.path | default: post.image | default: default_image %}
 
@@ -118,7 +156,7 @@ layout: default
 
               <div class="pin ms-1">
                 <i class="fas fa-thumbtack fa-fw"></i>
-                <span>{% if post.pin %}{{ site.data.locales[lang].post.pin_prompt }}{% endif %}</span>
+                <span>{% if post.pin %}Pinned{% endif %}</span>
               </div>
             </div>
             <!-- .post-meta -->
