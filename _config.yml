@@ -149,7 +149,9 @@ assets:
 pwa:
   enabled: true # The option for PWA feature (installable)
   cache:
-    enabled: true # The option for PWA offline cache
+    # Left empty on purpose: the theme treats any value (even "false") as on.
+    # Empty = no service worker, so CMS edits show up as soon as the site rebuilds.
+    enabled: # The option for PWA offline cache
     # Paths defined here will be excluded from the PWA cache.
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.

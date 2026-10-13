@@ -34,3 +34,8 @@ Thumbs.db
 
 # Playwright MCP output
 .playwright-mcp/
+
+# Kill-switch service worker overriding the theme one
+!assets/js/dist/
+assets/js/dist/*
+!assets/js/dist/sw.min.js
