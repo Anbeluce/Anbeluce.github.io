@@ -128,10 +128,13 @@
         if (cached && Date.now() - cached.t < 5 * 60 * 1000) return renderGitHub(cached.event);
       } catch (e) {}
 
-      fetch('https://api.github.com/users/' + encodeURIComponent(gh.username) + '/events/public?per_page=1')
+      fetch('https://api.github.com/users/' + encodeURIComponent(gh.username) + '/events/public?per_page=10')
         .then(function (res) { return res.ok ? res.json() : Promise.reject(res.status); })
         .then(function (events) {
-          var event = events[0] || null;
+          // The API does not always return events newest-first
+          var event = events.reduce(function (latest, e) {
+            return !latest || e.created_at > latest.created_at ? e : latest;
+          }, null);
           try { sessionStorage.setItem(key, JSON.stringify({ t: Date.now(), event: event })); } catch (e) {}
           renderGitHub(event);
         })
