@@ -2,11 +2,11 @@
 enabled: true
 
 github:
-  enabled: true
+  enabled: false
   username: Anbeluce
 
 discord:
   # Needs your Discord user ID and membership in the Lanyard server (https://discord.gg/lanyard).
-  enabled: false
+  enabled: true
   user_id: ""
   show_activity: true
