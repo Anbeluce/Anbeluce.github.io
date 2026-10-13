@@ -3,6 +3,9 @@
 {%- assign accent = theme.accent_color | default: '#ffdc6b' -%}
 {%- assign overlay = theme.overlay | default: 0.68 -%}
 {%- assign background = theme.background | default: '/assets/img/bg/bg.svg' -%}
+{%- assign font_body = theme.font_body | default: 'Be Vietnam Pro' -%}
+{%- assign font_heading = theme.font_heading | default: font_body -%}
+{%- assign font_code = theme.font_code | default: 'JetBrains Mono' -%}
 <!-- Custom theme overrides (injected into <head> by Chirpy) -->
 <style>
   :root {
@@ -13,7 +16,26 @@
     --on-primary: {{ theme.on_primary | default: "#1b1505" }}; /* text on primary-colored backgrounds, set by _plugins/theme-settings.rb */
     --overlay: rgba(14, 12, 6, {{ overlay }});
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --font-body: '{{ font_body }}', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-heading: '{{ font_heading }}', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-code: '{{ font_code }}', ui-monospace, Consolas, monospace;
   }
+
+  /* Fonts (the theme hardcodes Lato/Oswald, which miss Vietnamese glyphs) */
+  body, button, input, textarea, .btn, .pagination, .toast-body, .tag span,
+  #archives .date.day, #toc-popup .label, .site-subtitle {
+    font-family: var(--font-body) !important;
+  }
+  h1, h2, h3, h4, h5, h6, .site-title, .card-title, .panel-heading, .post-title {
+    font-family: var(--font-heading) !important;
+    letter-spacing: -0.01em;
+  }
+  h1, h2, h3, .site-title, .card-title { font-weight: 700 !important; }
+  code, kbd, pre, samp, .highlight, .highlighter-rouge, .code-header {
+    font-family: var(--font-code) !important;
+  }
+  /* Room for stacked Vietnamese diacritics */
+  .content, .post-content, .card-text { line-height: 1.75; }
 
   /* Optional custom cursor: drop a .cur file at /assets/img/cursor.cur and uncomment */
   /*
@@ -68,7 +90,6 @@
   body, p, .post-content p, .card-text, .post-content li {
     font-weight: 500 !important;
     color: #f1ede4 !important;
-    letter-spacing: 0.2px;
   }
 
   #notification { z-index: 9999 !important; }

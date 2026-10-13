@@ -275,3 +275,15 @@ content:
         description: Thường là bản sáng hơn của màu chủ đạo
         type: string
         pattern: "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$"
+      - name: font_body
+        label: Font chữ nội dung
+        description: "Tên font trên fonts.google.com, nên lọc Language: Vietnamese. Ví dụ: Be Vietnam Pro, Inter, Lexend, Nunito, Montserrat"
+        type: string
+      - name: font_heading
+        label: Font tiêu đề
+        description: Để trống thì dùng font nội dung
+        type: string
+      - name: font_code
+        label: Font khối code
+        description: "Ví dụ: JetBrains Mono, Fira Code, Source Code Pro"
+        type: string

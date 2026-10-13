@@ -7,3 +7,8 @@ background: /assets/img/bg/r.jpg
 overlay: 0.68
 primary_color: "#f2c230"
 accent_color: "#ffdc6b"
+
+# Google Fonts names; pick fonts that list "Vietnamese" on fonts.google.com
+font_body: Be Vietnam Pro
+font_heading: Be Vietnam Pro
+font_code: JetBrains Mono

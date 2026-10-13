@@ -32,3 +32,20 @@ Jekyll::Hooks.register :site, :post_read do |site|
   luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
   theme["on_primary"] = luminance > 0.5 ? "#1b1505" : "#ffffff"
 end
+
+# Load the fonts chosen in _data/theme.yml instead of the theme's Lato/Source Sans Pro,
+# which lack Vietnamese glyphs. Only 400/700 are requested so any Google font works.
+Jekyll::Hooks.register :site, :post_read do |site|
+  theme = site.data["theme"]
+  cors = site.data.dig("origin", "cors")
+  next unless theme.is_a?(Hash) && cors.is_a?(Hash)
+
+  families = %w(font_body font_heading font_code)
+    .map { |key| theme[key].to_s.strip }
+    .reject(&:empty?)
+    .uniq
+  next if families.empty?
+
+  query = families.map { |name| "family=#{name.tr(' ', '+')}:wght@400;700" }.join("&")
+  cors["webfonts"] = "https://fonts.googleapis.com/css2?#{query}&display=swap"
+end
