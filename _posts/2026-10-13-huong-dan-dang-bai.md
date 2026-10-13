@@ -1,24 +1,28 @@
 ---
 title: Hướng dẫn đăng bài
-description: Bài mẫu giải thích cách đăng bài mới trên blog — qua dashboard Pages CMS hoặc tạo file Markdown — và các định dạng có thể dùng trong bài.
+description: Bài mẫu giải thích cách đăng bài mới trên blog — qua dashboard
+  Pages CMS hoặc tạo file Markdown — và các định dạng có thể dùng trong bài.
 date: 2026-10-13 08:00:00 +0700
-categories: [Getting Started]
-tags: [huong-dan]
+categories:
+  - Getting Started
+tags:
+  - guide
 image:
   path: /assets/img/posts/getting-started.svg
   alt: Hướng dẫn đăng bài
+pin: false
 ---
-
 Đây là bài mẫu duy nhất trên blog. Đọc xong thì bạn có thể xoá bài này đi.
 
 ## Cách 1: Đăng bài bằng dashboard (khuyên dùng)
 
-1. Vào <https://app.pagescms.org>, đăng nhập GitHub, chọn repo `Anbeluce.github.io`.
+1. Vào [https://app.pagescms.org](https://app.pagescms.org), đăng nhập GitHub, chọn repo `Anbeluce.github.io`.
 2. Bấm **Bài viết → Add an entry**.
 3. Điền các ô:
 
+
 | Ô | Ý nghĩa |
-| --- | --- |
+| ---------- | --------------------------------------------------------------------- |
 | Filename | Tên file, dạng `YYYY-MM-DD-ten-bai.md` — viết không dấu, nối bằng `-` |
 | Tiêu đề | Tiêu đề bài |
 | Mô tả ngắn | Hiện dưới tiêu đề trên card trang chủ |
@@ -29,17 +33,19 @@ image:
 | Ghim | Đưa bài lên đầu trang chủ |
 | Nội dung | Viết bằng Markdown (xem phần dưới) |
 
-4\. Bấm **Save**. Khoảng 1–2 phút sau bài sẽ lên site.
+
+4 Bấm **Save**. Khoảng 1–2 phút sau bài sẽ lên site.
 
 > Nếu đặt **ngày đăng ở tương lai**, bài sẽ bị ẩn cho tới khi có lần build sau thời điểm đó.
-{: .prompt-warning }
+> {: .prompt-warning }
 
 ## Cách 2: Tạo file Markdown
 
 Tạo file trong thư mục `_posts`{: .filepath }, ví dụ `_posts/2026-10-20-bai-moi.md`{: .filepath }, rồi commit và push:
 
 {% raw %}
-~~~markdown
+
+```markdown
 ---
 title: Tiêu đề bài
 description: Mô tả ngắn hiện trên trang chủ
@@ -52,7 +58,8 @@ image:
 ---
 
 Nội dung bài viết bằng Markdown...
-~~~
+```
+
 {% endraw %}
 
 ## Định dạng có thể dùng trong bài
@@ -82,43 +89,45 @@ def hello():
 ### Khung ghi chú
 
 > Ghi chú thông tin — thêm dòng `{: .prompt-info }` ngay dưới trích dẫn.
-{: .prompt-info }
+> {: .prompt-info }
 
 > Mẹo — dùng `{: .prompt-tip }`.
-{: .prompt-tip }
+> {: .prompt-tip }
 
 > Cảnh báo — dùng `{: .prompt-warning }`.
-{: .prompt-warning }
+> {: .prompt-warning }
 
 > Nguy hiểm — dùng `{: .prompt-danger }`.
-{: .prompt-danger }
+> {: .prompt-danger }
 
 ### Callout kiểu Notion
 
-<aside>
-💡 Bọc đoạn văn trong thẻ <code>&lt;aside&gt;...&lt;/aside&gt;</code> để có khung nổi bật như thế này.
-</aside>
+💡 Bọc đoạn văn trong thẻ `<aside>...</aside>` để có khung nổi bật như thế này.
 
 ### Ảnh trong bài
 
 Upload ảnh vào mục **Media** của dashboard (hoặc thư mục `assets/img/`{: .filepath }), rồi chèn:
 
 {% raw %}
-~~~markdown
+
+```markdown
 ![Mô tả ảnh](/assets/img/posts/ten-anh.png)
 _Chú thích nằm dưới ảnh_
-~~~
+```
+
 {% endraw %}
 
 ![Ảnh ví dụ](/assets/img/posts/default.svg)
-_Ví dụ ảnh có chú thích_
+*Ví dụ ảnh có chú thích*
 
 ### Bảng
 
+
 | Công cụ | Dùng để |
-| --- | --- |
+| ---------- | ----------------- |
 | Wireshark | Phân tích gói tin |
 | Volatility | Phân tích bộ nhớ |
+
 
 ## Card ghim trên trang chủ
 
