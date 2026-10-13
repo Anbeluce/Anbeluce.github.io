@@ -1,0 +1,79 @@
+# Decap CMS configuration — https://decapcms.org/docs/configuration-options/
+# This is the recommended place to write posts: it has toolbar buttons for
+# khung ghi chú and callout, which Pages CMS's editor can't offer (see
+# admin/editor-components.js). For everything else — About, ảnh nền, màu sắc,
+# trạng thái online, icon mạng xã hội — keep using Pages CMS
+# (https://app.pagescms.org), unchanged.
+
+backend:
+  name: github
+  repo: Anbeluce/Anbeluce.github.io
+  branch: main
+  # OAuth proxy (Cloudflare Worker) — fill in once deployed, see README.
+  base_url: https://sveltia-cms-auth.nguyen-viet-thao-25.workers.dev
+  auth_endpoint: auth
+
+# Decap reads the live repo on every load (not a build step), so a save here
+# shows up on the site after the same ~1–2 minute GitHub Actions build as
+# any other commit.
+publish_mode: simple
+media_folder: assets/img/posts
+public_folder: /assets/img/posts
+
+collections:
+  - name: posts
+    label: Bài viết
+    folder: _posts
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    preview_path: "posts/{{slug}}"
+    sortable_fields: [title, date, draft]
+    fields:
+      - { label: Tiêu đề, name: title, widget: string }
+      - { label: Mô tả ngắn, name: description, widget: text, required: false }
+      - label: Ngày đăng
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD HH:mm:ss ZZ" # ZZ = +0700, pinned Vietnam time (see _plugins)
+        date_format: "DD/MM/YYYY"
+        time_format: "HH:mm"
+        default: "{{now}}"
+      - label: Danh mục
+        name: categories
+        widget: list
+        required: false
+        hint: "Tối đa 2 cấp: mục cha rồi mục con, ví dụ Cyber Defenders, Threat Hunting"
+      - label: Tags
+        name: tags
+        widget: list
+        required: false
+        hint: "Viết thường, nối bằng dấu gạch ngang, ví dụ endpoint-forensics"
+      - label: Ảnh bìa
+        name: image
+        widget: object
+        required: false
+        collapsed: true
+        fields:
+          - label: Ảnh
+            name: path
+            widget: image
+            required: false
+            media_folder: "/assets/img/posts"
+            public_folder: "/assets/img/posts"
+          - { label: Mô tả ảnh, name: alt, widget: string, required: false }
+      - { label: Ghim lên đầu trang chủ, name: pin, widget: boolean, default: false, required: false }
+      - label: Ẩn bài (nháp, chưa đăng)
+        name: draft
+        widget: boolean
+        default: false
+        required: false
+        hint: "Bật để giấu bài khỏi toàn bộ site. Bài không mất, chỉ không ai xem được ngoài bạn trong này."
+      - label: Nội dung
+        name: body
+        widget: richtext
+        editor_components:
+          - image
+          - code-block
+          - prompt-box
+          - aside-callout

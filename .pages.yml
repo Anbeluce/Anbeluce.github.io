@@ -2,6 +2,11 @@
 # Open https://app.pagescms.org, sign in with GitHub and pick this repository.
 # Every save is a commit; GitHub Actions then rebuilds the site.
 #
+# Writing posts lives in /admin (Decap CMS) now — it has toolbar buttons for
+# khung ghi chú / callout that this tool's rich-text field can't offer. This
+# file only manages the rest of the site: About, media, pinned home cards,
+# sidebar icons, online status, theme.
+#
 # Saving a "file" entry (about, pinned_categories, contact, status, theme)
 # rewrites it from this schema, so any YAML comment in those files is lost on
 # the next save — put explanations in a field's `description` instead, which
@@ -11,10 +16,10 @@ settings:
   commit:
     # {path} is the file touched; the rest are the defaults Pages CMS fills in.
     templates:
-      create: "post: add {filename} (Pages CMS)"
-      update: "post: update {filename} (Pages CMS)"
-      delete: "post: remove {filename} (Pages CMS)"
-      rename: "post: rename {oldPath} -> {newPath} (Pages CMS)"
+      create: "site: add {filename} (Pages CMS)"
+      update: "site: update {filename} (Pages CMS)"
+      delete: "site: remove {filename} (Pages CMS)"
+      rename: "site: rename {oldPath} -> {newPath} (Pages CMS)"
 
 media:
   input: assets/img
@@ -28,132 +33,7 @@ media:
       delete: "media: remove {filename} (Pages CMS)"
       rename: "media: rename {oldPath} -> {newPath} (Pages CMS)"
 
-# Reusable field group for a post's cover image, shared by both post collections below.
-components:
-  cover_image:
-    type: object
-    label: Ảnh bìa
-    fields:
-      - name: path
-        label: Ảnh
-        type: image
-        options:
-          path: assets/img/posts
-      - name: alt
-        label: Mô tả ảnh
-        type: string
-
 content:
-  # ⭐ Default way to write: soạn như Word, không cần biết Markdown.
-  # Chỉ mở "Bài viết (nâng cao)" khi bài cần khung ghi chú màu hoặc cú pháp
-  # đặc biệt của theme — xem bài "Hướng dẫn đăng bài" để biết khi nào cần.
-  - name: quick_posts
-    label: "⭐ Viết bài"
-    type: collection
-    path: _posts
-    format: yaml-frontmatter
-    filename:
-      template: "{year}-{month}-{day}-{title}.md"
-      field: false
-    view:
-      primary: title
-      fields: [title, date, draft]
-      sort: date
-      order: desc
-    fields:
-      - name: title
-        label: Tiêu đề
-        type: string
-        required: true
-      - name: description
-        label: Mô tả ngắn
-        type: text
-      - name: date
-        label: Ngày đăng
-        type: date
-        required: true
-        options:
-          time: true
-          format: "yyyy-MM-dd HH:mm:ss '+0700'"
-      - name: categories
-        label: Danh mục
-        type: string
-        list: true
-      - name: tags
-        label: Tags
-        type: string
-        list: true
-      - name: image
-        component: cover_image
-      - name: pin
-        label: Ghim lên đầu trang chủ
-        type: boolean
-      - name: draft
-        label: Ẩn bài (nháp, chưa đăng)
-        description: "Bật ô này để giấu bài khỏi toàn bộ site — bài không mất, chỉ không ai xem được ngoài bạn trong này. Tắt lại để đăng."
-        type: boolean
-      - name: body
-        label: Nội dung
-        type: rich-text
-        options:
-          format: markdown
-          path: assets/img/posts
-          rename: safe
-
-  - name: posts
-    label: Bài viết (nâng cao)
-    type: collection
-    path: _posts
-    format: yaml-frontmatter
-    filename:
-      template: "{year}-{month}-{day}-{title}.md"
-      field: create
-    view:
-      primary: title
-      fields: [title, date, categories, draft]
-      sort: date
-      order: desc
-    fields:
-      - name: title
-        label: Tiêu đề
-        type: string
-        required: true
-      - name: description
-        label: Mô tả ngắn (hiện trên card trang chủ)
-        type: text
-      - name: date
-        label: Ngày đăng
-        type: date
-        required: true
-        options:
-          time: true
-          # Jekyll reads a date without offset as UTC, so pin Vietnam time explicitly
-          format: "yyyy-MM-dd HH:mm:ss '+0700'"
-      - name: categories
-        label: Danh mục
-        description: "Tối đa 2 cấp: mục cha rồi mục con, ví dụ: Cyber Defenders → Threat Hunting"
-        type: string
-        list: true
-      - name: tags
-        label: Tags
-        description: "Viết thường, nối bằng dấu gạch ngang, ví dụ: endpoint-forensics"
-        type: string
-        list: true
-      - name: image
-        component: cover_image
-      - name: pin
-        label: Ghim lên đầu trang chủ
-        type: boolean
-      - name: draft
-        label: Ẩn bài (nháp, chưa đăng)
-        description: "Bật ô này để giấu bài khỏi toàn bộ site — bài không mất, chỉ không ai xem được ngoài bạn trong này. Tắt lại để đăng."
-        type: boolean
-      - name: body
-        label: "Nội dung (Markdown thô — cho prompt box, aside, v.v. Xem bài Hướng dẫn đăng bài)"
-        type: code
-        options:
-          format: markdown
-
   - name: about
     label: Trang About
     type: file
