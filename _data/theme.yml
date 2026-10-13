@@ -1,12 +1,9 @@
-# Site identity and look, editable in Pages CMS → "Giao diện & thông tin site".
-# Empty values fall back to _config.yml.
 title: My Blog
 tagline: Mastermind, HaNoi, VN
 description: Blue team notes, CTF writeups and security study logs.
 author: Your Name
 avatar: /assets/img/avatar.svg
-
-background: /assets/img/bg/bg.svg
-overlay: 0.68          # 0 = no darkening, 1 = black
+background: /assets/img/bg/r.jpg
+overlay: 0.68
 primary_color: "#f2c230"
 accent_color: "#ffdc6b"
