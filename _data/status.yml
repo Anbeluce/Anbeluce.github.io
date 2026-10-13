@@ -1,0 +1,12 @@
+# Online status shown under the tagline in the sidebar (editable in Pages CMS → "Trạng thái online").
+enabled: true
+
+github:
+  enabled: true
+  username: Anbeluce
+
+discord:
+  # Needs your Discord user ID and membership in the Lanyard server (https://discord.gg/lanyard).
+  enabled: false
+  user_id: ""
+  show_activity: true

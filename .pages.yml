@@ -137,3 +137,38 @@ content:
       - name: noblank
         label: Mở trong tab hiện tại
         type: boolean
+
+  - name: status
+    label: Trạng thái online (sidebar)
+    type: file
+    path: _data/status.yml
+    format: yaml
+    fields:
+      - name: enabled
+        label: Hiện khung trạng thái dưới tên blog
+        type: boolean
+      - name: github
+        label: GitHub
+        type: object
+        fields:
+          - name: enabled
+            label: Hiện hoạt động gần nhất trên GitHub
+            type: boolean
+          - name: username
+            label: Username GitHub
+            type: string
+      - name: discord
+        label: Discord
+        type: object
+        fields:
+          - name: enabled
+            label: Hiện trạng thái online Discord
+            description: "Phải tham gia server Lanyard trước: https://discord.gg/lanyard"
+            type: boolean
+          - name: user_id
+            label: Discord User ID
+            description: "Dãy số. Discord → Cài đặt → Nâng cao → bật Chế độ nhà phát triển, rồi chuột phải vào tên mình → Sao chép ID người dùng"
+            type: string
+          - name: show_activity
+            label: Hiện đang chơi game / nghe Spotify / custom status
+            type: boolean

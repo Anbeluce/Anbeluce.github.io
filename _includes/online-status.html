@@ -1,0 +1,240 @@
+{%- comment -%}
+  Online status in the sidebar, configured in _data/status.yml.
+  - GitHub: latest public activity (REST events API; GitHub may delay events by minutes to hours).
+  - Discord: live presence through Lanyard (https://github.com/Phineas/lanyard).
+{%- endcomment -%}
+{%- assign status = site.data.status -%}
+{%- if status.enabled -%}
+<style>
+  .os-avatar-wrap { position: relative; display: inline-block; }
+  .os-avatar-dot {
+    position: absolute;
+    right: 0.3rem;
+    bottom: 0.3rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: 3px solid var(--sidebar-bg, #1e1e1e);
+    z-index: 2;
+  }
+
+  .online-status {
+    margin-top: 0.25rem;
+    max-width: 13rem;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    color: var(--sidebar-muted-color, #868686);
+  }
+  .online-status .os-row { display: flex; align-items: center; gap: 0.45rem; margin-top: 0.4rem; }
+  .online-status .os-icon { flex: 0 0 0.9rem; text-align: center; }
+  .online-status .os-dot { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; }
+  .online-status .os-sub {
+    padding-left: 1.35rem;
+    opacity: 0.85;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .online-status a { color: inherit !important; }
+  .online-status a:hover { color: var(--color-accent) !important; }
+
+  .os-online { background: #23a55a; }
+  .os-idle { background: #f0b232; }
+  .os-dnd { background: #f23f43; }
+  .os-offline { background: #80848e; }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var cfg = {{ status | jsonify }};
+    var subtitle = document.querySelector('#sidebar .site-subtitle');
+    var avatar = document.getElementById('avatar');
+    if (!subtitle) return;
+
+    var box = document.createElement('div');
+    box.className = 'online-status';
+    subtitle.insertAdjacentElement('afterend', box);
+
+    function el(tag, className, text) {
+      var node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    function ago(iso) {
+      var s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+      if (s < 60) return 'vừa xong';
+      var units = [[31536000, 'năm'], [2592000, 'tháng'], [86400, 'ngày'], [3600, 'giờ'], [60, 'phút']];
+      for (var i = 0; i < units.length; i++) {
+        if (s >= units[i][0]) return Math.floor(s / units[i][0]) + ' ' + units[i][1] + ' trước';
+      }
+    }
+
+    /* ---------- GitHub: latest public activity ---------- */
+
+    var gh = cfg.github || {};
+    var ghRow = null;
+
+    function describe(event) {
+      var p = event.payload || {};
+      switch (event.type) {
+        case 'PushEvent': return 'Push code lên';
+        case 'CreateEvent':
+          return p.ref_type === 'repository' ? 'Tạo repo' : 'Tạo ' + (p.ref_type === 'tag' ? 'tag' : 'nhánh') + ' ở';
+        case 'DeleteEvent': return 'Xoá ' + (p.ref_type === 'tag' ? 'tag' : 'nhánh') + ' ở';
+        case 'WatchEvent': return 'Star';
+        case 'ForkEvent': return 'Fork';
+        case 'IssuesEvent': return (p.action === 'closed' ? 'Đóng' : 'Mở') + ' issue ở';
+        case 'IssueCommentEvent': return 'Bình luận ở';
+        case 'PullRequestEvent': return 'Pull request ở';
+        case 'PullRequestReviewEvent': return 'Review PR ở';
+        case 'ReleaseEvent': return 'Phát hành bản mới';
+        case 'PublicEvent': return 'Công khai repo';
+        default: return 'Hoạt động ở';
+      }
+    }
+
+    function renderGitHub(event) {
+      if (!event) return;
+      var owner = event.repo.name.split('/')[0];
+      var repoLabel = owner.toLowerCase() === gh.username.toLowerCase()
+        ? event.repo.name.split('/')[1]
+        : event.repo.name;
+
+      ghRow = el('div');
+      var row = el('div', 'os-row');
+      var icon = el('i', 'fab fa-github os-icon');
+      var link = el('a', null, describe(event) + ' ' + repoLabel);
+      link.href = 'https://github.com/' + event.repo.name;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      row.appendChild(icon);
+      row.appendChild(link);
+
+      var when = el('div', 'os-sub', ago(event.created_at));
+      when.dataset.time = event.created_at;
+      when.title = new Date(event.created_at).toLocaleString('vi-VN');
+
+      ghRow.appendChild(row);
+      ghRow.appendChild(when);
+      box.appendChild(ghRow);
+    }
+
+    function loadGitHub() {
+      var key = 'os-gh-' + gh.username;
+      try {
+        var cached = JSON.parse(sessionStorage.getItem(key) || 'null');
+        if (cached && Date.now() - cached.t < 5 * 60 * 1000) return renderGitHub(cached.event);
+      } catch (e) {}
+
+      fetch('https://api.github.com/users/' + encodeURIComponent(gh.username) + '/events/public?per_page=1')
+        .then(function (res) { return res.ok ? res.json() : Promise.reject(res.status); })
+        .then(function (events) {
+          var event = events[0] || null;
+          try { sessionStorage.setItem(key, JSON.stringify({ t: Date.now(), event: event })); } catch (e) {}
+          renderGitHub(event);
+        })
+        .catch(function (err) { console.warn('[online-status] GitHub:', err); });
+    }
+
+    /* ---------- Discord: live presence via Lanyard ---------- */
+
+    var dc = cfg.discord || {};
+    var LABELS = { online: 'Đang online', idle: 'Tạm vắng', dnd: 'Đừng làm phiền', offline: 'Offline' };
+    var dcRow = el('div');
+    var avatarDot = null;
+
+    if (avatar && dc.enabled && dc.user_id) {
+      var wrap = el('span', 'os-avatar-wrap');
+      avatar.parentNode.insertBefore(wrap, avatar);
+      wrap.appendChild(avatar);
+      avatarDot = el('span', 'os-avatar-dot');
+      avatarDot.hidden = true;
+      wrap.appendChild(avatarDot);
+    }
+
+    function activityText(d) {
+      if (d.listening_to_spotify && d.spotify) {
+        return '🎧 ' + d.spotify.song + ' – ' + d.spotify.artist;
+      }
+      var verbs = { 0: 'Đang chơi', 1: 'Đang stream', 2: 'Đang nghe', 3: 'Đang xem', 5: 'Đang thi đấu' };
+      var acts = d.activities || [];
+      for (var i = 0; i < acts.length; i++) {
+        if (verbs[acts[i].type]) return verbs[acts[i].type] + ' ' + acts[i].name;
+      }
+      return null;
+    }
+
+    function customStatus(d) {
+      var acts = d.activities || [];
+      for (var i = 0; i < acts.length; i++) {
+        if (acts[i].type === 4) {
+          var emoji = acts[i].emoji && !acts[i].emoji.id ? acts[i].emoji.name + ' ' : '';
+          var text = (emoji + (acts[i].state || '')).trim();
+          if (text) return text;
+        }
+      }
+      return null;
+    }
+
+    function renderDiscord(d) {
+      var st = d.discord_status in LABELS ? d.discord_status : 'offline';
+      dcRow.textContent = '';
+
+      var row = el('div', 'os-row');
+      var dot = el('span', 'os-icon');
+      dot.appendChild(el('span', 'os-dot os-' + st));
+      var label = LABELS[st] + ' trên Discord';
+      if (st !== 'offline' && d.active_on_discord_mobile && !d.active_on_discord_desktop) label += ' · điện thoại';
+      row.appendChild(dot);
+      row.appendChild(el('span', null, label));
+      dcRow.appendChild(row);
+
+      if (dc.show_activity && st !== 'offline') {
+        [customStatus(d), activityText(d)].forEach(function (text) {
+          if (text) dcRow.appendChild(el('div', 'os-sub', text));
+        });
+      }
+
+      if (avatarDot) {
+        avatarDot.className = 'os-avatar-dot os-' + st;
+        avatarDot.title = LABELS[st];
+        avatarDot.hidden = false;
+      }
+    }
+
+    function loadDiscord() {
+      if (document.hidden) return;
+      fetch('https://api.lanyard.rest/v1/users/' + encodeURIComponent(dc.user_id))
+        .then(function (res) { return res.json(); })
+        .then(function (json) {
+          if (!json.success) throw (json.error && json.error.message) || 'unknown error';
+          renderDiscord(json.data);
+        })
+        .catch(function (err) {
+          dcRow.textContent = '';
+          if (avatarDot) avatarDot.hidden = true;
+          console.warn('[online-status] Discord (did you join discord.gg/lanyard?):', err);
+        });
+    }
+
+    /* ---------- start ---------- */
+
+    if (dc.enabled && dc.user_id) {
+      box.appendChild(dcRow);
+      loadDiscord();
+      setInterval(loadDiscord, 30 * 1000);
+      document.addEventListener('visibilitychange', loadDiscord);
+    }
+
+    if (gh.enabled && gh.username) loadGitHub();
+
+    setInterval(function () {
+      box.querySelectorAll('[data-time]').forEach(function (node) {
+        node.textContent = ago(node.dataset.time);
+      });
+    }, 60 * 1000);
+  });
+</script>
+{%- endif -%}
