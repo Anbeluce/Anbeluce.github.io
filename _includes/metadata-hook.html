@@ -22,11 +22,15 @@
   }
 
   /* Fonts (the theme hardcodes Lato/Oswald, which miss Vietnamese glyphs) */
+  /* Every selector the theme gives Lato/Oswald/Source Sans Pro (from its compiled CSS) */
   body, button, input, textarea, .btn, .pagination, .toast-body, .tag span,
-  #archives .date.day, #toc-popup .label, .site-subtitle {
+  #archives .date.day, .site-subtitle, header .post-desc, #toc-popup #toc-popup-content,
+  .share-mastodon {
     font-family: var(--font-body) !important;
   }
-  h1, h2, h3, h4, h5, h6, .site-title, .card-title, .panel-heading, .post-title {
+  h1, h2, h3, h4, h5, h6, .site-title, .card-title, .panel-heading, .post-title,
+  #search-results a, #topbar-title, #toc-bar .label, #toc-popup .header .label,
+  #toc-solo-trigger .label {
     font-family: var(--font-heading) !important;
     letter-spacing: -0.01em;
   }
