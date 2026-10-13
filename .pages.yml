@@ -44,9 +44,11 @@ components:
         type: string
 
 content:
-  # Visual editor for writing on a phone. Use "Bài viết" (Markdown) for posts with theme-specific syntax.
+  # ⭐ Default way to write: soạn như Word, không cần biết Markdown.
+  # Chỉ mở "Bài viết (nâng cao)" khi bài cần khung ghi chú màu hoặc cú pháp
+  # đặc biệt của theme — xem bài "Hướng dẫn đăng bài" để biết khi nào cần.
   - name: quick_posts
-    label: Viết nhanh (soạn trực quan)
+    label: "⭐ Viết bài"
     type: collection
     path: _posts
     format: yaml-frontmatter
@@ -55,7 +57,7 @@ content:
       field: false
     view:
       primary: title
-      fields: [title, date]
+      fields: [title, date, draft]
       sort: date
       order: desc
     fields:
@@ -86,6 +88,10 @@ content:
       - name: pin
         label: Ghim lên đầu trang chủ
         type: boolean
+      - name: draft
+        label: Ẩn bài (nháp, chưa đăng)
+        description: "Bật ô này để giấu bài khỏi toàn bộ site — bài không mất, chỉ không ai xem được ngoài bạn trong này. Tắt lại để đăng."
+        type: boolean
       - name: body
         label: Nội dung
         type: rich-text
@@ -95,7 +101,7 @@ content:
           rename: safe
 
   - name: posts
-    label: Bài viết (Markdown)
+    label: Bài viết (nâng cao)
     type: collection
     path: _posts
     format: yaml-frontmatter
@@ -104,7 +110,7 @@ content:
       field: create
     view:
       primary: title
-      fields: [title, date, categories]
+      fields: [title, date, categories, draft]
       sort: date
       order: desc
     fields:
@@ -138,8 +144,12 @@ content:
       - name: pin
         label: Ghim lên đầu trang chủ
         type: boolean
+      - name: draft
+        label: Ẩn bài (nháp, chưa đăng)
+        description: "Bật ô này để giấu bài khỏi toàn bộ site — bài không mất, chỉ không ai xem được ngoài bạn trong này. Tắt lại để đăng."
+        type: boolean
       - name: body
-        label: Nội dung (Markdown)
+        label: "Nội dung (Markdown thô — cho prompt box, aside, v.v. Xem bài Hướng dẫn đăng bài)"
         type: code
         options:
           format: markdown

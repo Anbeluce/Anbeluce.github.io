@@ -1,7 +1,7 @@
 ---
 title: Hướng dẫn đăng bài
-description: Bài mẫu giải thích cách đăng bài mới trên blog — qua dashboard
-  Pages CMS hoặc tạo file Markdown — và các định dạng có thể dùng trong bài.
+description: Bài mẫu giải thích cách đăng, ẩn và quản lý bài trên blog — không
+  cần biết Markdown — và các định dạng có thể dùng khi cần viết nâng cao.
 date: 2026-10-13 08:00:00 +0700
 categories:
   - Getting Started
@@ -14,16 +14,15 @@ pin: false
 ---
 Đây là bài mẫu duy nhất trên blog. Đọc xong thì bạn có thể xoá bài này đi.
 
-## Cách 1: Đăng bài bằng dashboard (khuyên dùng)
+## Đăng bài — không cần biết Markdown
 
-1. Vào [https://app.pagescms.org](https://app.pagescms.org), đăng nhập GitHub, chọn repo `Anbeluce.github.io`.
-2. Bấm **Bài viết → Add an entry**.
-3. Điền các ô:
-
+1. Vào [app.pagescms.org](https://app.pagescms.org), đăng nhập GitHub, chọn repo `Anbeluce.github.io`.
+2. Bấm mục **⭐ Viết bài → Add an entry**.
+3. Soạn như soạn Word bình thường: gõ chữ, bôi đen để in đậm/nghiêng, gõ **`/`** để chèn tiêu đề, danh sách, ảnh...
+4. Điền thêm các ô bên cạnh nội dung:
 
 | Ô | Ý nghĩa |
-| ---------- | --------------------------------------------------------------------- |
-| Filename | Tên file, dạng `YYYY-MM-DD-ten-bai.md` — viết không dấu, nối bằng `-` |
+| --- | --- |
 | Tiêu đề | Tiêu đề bài |
 | Mô tả ngắn | Hiện dưới tiêu đề trên card trang chủ |
 | Ngày đăng | Ngày giờ đăng bài (giờ Việt Nam) |
@@ -31,36 +30,35 @@ pin: false
 | Tags | Từ khoá, viết thường, nối bằng `-` |
 | Ảnh bìa | Ảnh hiện bên phải card trang chủ (không bắt buộc) |
 | Ghim | Đưa bài lên đầu trang chủ |
-| Nội dung | Viết bằng Markdown (xem phần dưới) |
+| Ẩn bài | Xem mục **Ẩn bài / đăng bài** bên dưới |
 
-
-4 Bấm **Save**. Khoảng 1–2 phút sau bài sẽ lên site.
+5. Bấm **Save**. Khoảng 1–2 phút sau bài lên site.
 
 > Nếu đặt **ngày đăng ở tương lai**, bài sẽ bị ẩn cho tới khi có lần build sau thời điểm đó.
 > {: .prompt-warning }
 
-## Cách 2: Tạo file Markdown
+## Ẩn bài / đăng bài (quản lý bài)
 
-Tạo file trong thư mục `_posts`{: .filepath }, ví dụ `_posts/2026-10-20-bai-moi.md`{: .filepath }, rồi commit và push:
+Mỗi bài có ô **"Ẩn bài (nháp, chưa đăng)"**:
 
-{% raw %}
+- **Bật** — bài bị giấu khỏi toàn bộ site: không hiện ở trang chủ, danh mục, tìm kiếm, RSS... Bài vẫn nằm trong dashboard, chỉ bạn thấy được.
+- **Tắt** (mặc định) — bài hiển thị công khai như bình thường.
 
-```markdown
----
-title: Tiêu đề bài
-description: Mô tả ngắn hiện trên trang chủ
-date: 2026-10-20 20:00:00 +0700   # luôn ghi kèm +0700 (giờ Việt Nam)
-categories: [CTF Writeups]
-tags: [ctf, forensics]
-image:
-  path: /assets/img/posts/ten-anh.png
-  alt: Mô tả ảnh
----
+Dùng khi viết dở hoặc chưa muốn công bố — bật ô này thay vì xoá bài, sau đó tắt đi khi sẵn sàng đăng.
 
-Nội dung bài viết bằng Markdown...
-```
+Ở mục **⭐ Viết bài**, danh sách bài có thêm cột trạng thái này để bạn nhìn nhanh bài nào đang ẩn.
 
-{% endraw %}
+## Khi nào cần "Bài viết (nâng cao)"
+
+Mục **⭐ Viết bài** soạn trực quan là đủ cho hầu hết bài viết. Chỉ cần mở **Bài viết (nâng cao)** khi bài có:
+
+- Khung ghi chú màu (info/tip/warning/danger) hoặc callout kiểu Notion — xem ví dụ bên dưới.
+- Đoạn Markdown bạn muốn kiểm soát từng ký tự, ví dụ copy từ nơi khác sang.
+
+Mục này cho gõ Markdown thô trực tiếp — chính là những gì bạn thấy ở phần **Định dạng** dưới đây.
+
+> Mẹo: trong mục ⭐ Viết bài, khung soạn có nút chuyển **Editor / Source** ở góc. Bấm **Source** là gõ được Markdown thô y như mục nâng cao, không cần đổi mục.
+> {: .prompt-tip }
 
 ## Định dạng có thể dùng trong bài
 
@@ -122,12 +120,34 @@ _Chú thích nằm dưới ảnh_
 
 ### Bảng
 
-
 | Công cụ | Dùng để |
-| ---------- | ----------------- |
+| --- | --- |
 | Wireshark | Phân tích gói tin |
 | Volatility | Phân tích bộ nhớ |
 
+## Tạo file trực tiếp (cho ai quen Git)
+
+Tạo file trong thư mục `_posts`{: .filepath }, ví dụ `_posts/2026-10-20-bai-moi.md`{: .filepath }, rồi commit và push:
+
+{% raw %}
+
+```markdown
+---
+title: Tiêu đề bài
+description: Mô tả ngắn hiện trên trang chủ
+date: 2026-10-20 20:00:00 +0700   # luôn ghi kèm +0700 (giờ Việt Nam)
+categories: [CTF Writeups]
+tags: [ctf, forensics]
+draft: false   # bật true để ẩn bài
+image:
+  path: /assets/img/posts/ten-anh.png
+  alt: Mô tả ảnh
+---
+
+Nội dung bài viết bằng Markdown...
+```
+
+{% endraw %}
 
 ## Card ghim trên trang chủ
 
