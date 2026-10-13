@@ -8,5 +8,5 @@ github:
 discord:
   # Needs your Discord user ID and membership in the Lanyard server (https://discord.gg/lanyard).
   enabled: true
-  user_id: ""
+  user_id: "904991579851329588"
   show_activity: true
