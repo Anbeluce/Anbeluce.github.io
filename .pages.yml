@@ -9,8 +9,68 @@ media:
   rename: safe
 
 content:
+  # Visual editor for writing on a phone. Use "Bài viết" (Markdown) for posts with theme-specific syntax.
+  - name: quick_posts
+    label: Viết nhanh (soạn trực quan)
+    type: collection
+    path: _posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{title}.md"
+      field: false
+    view:
+      primary: title
+      fields: [title, date]
+      sort: date
+      order: desc
+    fields:
+      - name: title
+        label: Tiêu đề
+        type: string
+        required: true
+      - name: description
+        label: Mô tả ngắn
+        type: text
+      - name: date
+        label: Ngày đăng
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd HH:mm:ss '+0700'"
+      - name: categories
+        label: Danh mục
+        type: string
+        list: true
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: image
+        label: Ảnh bìa
+        type: object
+        fields:
+          - name: path
+            label: Ảnh
+            type: image
+            options:
+              path: assets/img/posts
+          - name: alt
+            label: Mô tả ảnh
+            type: string
+      - name: pin
+        label: Ghim lên đầu trang chủ
+        type: boolean
+      - name: body
+        label: Nội dung
+        type: rich-text
+        options:
+          format: markdown
+          path: assets/img/posts
+          rename: safe
+
   - name: posts
-    label: Bài viết
+    label: Bài viết (Markdown)
     type: collection
     path: _posts
     format: yaml-frontmatter
