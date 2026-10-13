@@ -1,20 +1,15 @@
-#  The contact options (sidebar bottom icons).
-
 - type: github
-  icon: "fab fa-github"
-
+  icon: fab fa-github
+  noblank: false
 - type: linkedin
-  icon: "fab fa-linkedin"
-  url: "https://www.linkedin.com/in/your-linkedin" # change to your LinkedIn
-
+  icon: fab fa-linkedin
+  url: https://www.linkedin.com/in/thao-nguyen-viet-561918409/
+  noblank: false
+- type: discord
+  icon: fab fa-discord
+  url: https://discord.com/users/904991579851329588
+  noblank: false
 - type: facebook
-  icon: "fab fa-facebook"
-  url: "https://www.facebook.com/your-facebook" # change to your Facebook
-
-- type: email
-  icon: "fas fa-envelope"
-  noblank: true # open link in current tab
-
-- type: cyberdefenders
-  icon: "fas fa-shield-halved"
-  url: "https://cyberdefenders.org/p/your-username" # change to your CyberDefenders profile
+  icon: fas fa-facebook
+  url: https://www.facebook.com/anbelucle25
+  noblank: false
