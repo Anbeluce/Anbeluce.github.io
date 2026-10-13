@@ -131,7 +131,7 @@
       fetch('https://api.github.com/users/' + encodeURIComponent(gh.username) + '/events/public?per_page=10')
         .then(function (res) { return res.ok ? res.json() : Promise.reject(res.status); })
         .then(function (events) {
-          // The API does not always return events newest-first
+          /* The API does not always return events newest-first */
           var event = events.reduce(function (latest, e) {
             return !latest || e.created_at > latest.created_at ? e : latest;
           }, null);
