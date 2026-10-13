@@ -3,12 +3,10 @@ tagline: HaNoi, VN
 description: My Blog
 author: Anbeluce
 avatar: /assets/img/cd762f50-bd1e-4633-a69a-a8073fdc9da9.png
-background: /assets/img/bg/r.jpg
+background: /assets/img/bg/r-1.jpg
 overlay: 0.68
 primary_color: "#f2c230"
 accent_color: "#ffdc6b"
-
-# Google Fonts names; pick fonts that list "Vietnamese" on fonts.google.com
 font_body: Be Vietnam Pro
 font_heading: Be Vietnam Pro
 font_code: JetBrains Mono
