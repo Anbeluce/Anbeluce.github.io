@@ -26,6 +26,9 @@ package-lock.json
 _sass/vendors
 assets/js/dist
 
+# Local post template (not published, not committed)
+_templates/
+
 # Hidden system files
 *~
 .DS_Store
