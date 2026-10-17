@@ -11,6 +11,7 @@ image:
   path: /assets/img/posts/getting-started.svg
   alt: Hướng dẫn đăng bài
 pin: false
+draft: true
 ---
 Đây là bài mẫu duy nhất trên blog. Đọc xong thì bạn có thể xoá bài này đi.
 
@@ -125,10 +126,10 @@ _Chú thích nằm dưới ảnh_
 
 ### Bảng
 
-| Công cụ | Dùng để |
-| --- | --- |
-| Wireshark | Phân tích gói tin |
-| Volatility | Phân tích bộ nhớ |
+| Công cụ    | Dùng để           |
+| ---------- | ----------------- |
+| Wireshark  | Phân tích gói tin |
+| Volatility | Phân tích bộ nhớ  |
 
 ## Card ghim trên trang chủ
 
