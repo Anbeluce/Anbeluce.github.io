@@ -15,6 +15,13 @@ layout: default
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% if paginator.page == 1 %}
     {% for pinned in site.data.pinned_categories %}
+      {% assign category_posts = site.categories[pinned.category] %}
+      {% unless pinned.url or category_posts.size > 0 %}
+        {% continue %}
+        {% comment %} No url override and the category has no (published) posts
+        — the archive page won't exist, so skip the card instead of linking
+        to a 404. A post going draft can empty a category at any time. {% endcomment %}
+      {% endunless %}
       {% assign category_url = pinned.category | slugify | url_encode | prepend: '/categories/' | append: '/' %}
       <article class="card-wrapper card">
         <a
