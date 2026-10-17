@@ -144,7 +144,7 @@
     /* ---------- Discord: live presence via Lanyard ---------- */
 
     var dc = cfg.discord || {};
-    var LABELS = { online: 'Đang online', idle: 'Tạm vắng', dnd: 'Đừng làm phiền', offline: 'Offline' };
+    var LABELS = { online: 'Online', idle: 'Idle', dnd: 'Do not disturb', offline: 'Offline' };
     var dcRow = el('div');
     var avatarDot = null;
 
@@ -188,7 +188,7 @@
       var row = el('div', 'os-row');
       var dot = el('span', 'os-icon');
       dot.appendChild(el('span', 'os-dot os-' + st));
-      var label = LABELS[st] + ' trên Discord';
+      var label = 'Discord status: ' + LABELS[st];
       if (st !== 'offline' && d.active_on_discord_mobile && !d.active_on_discord_desktop) label += ' · điện thoại';
       row.appendChild(dot);
       row.appendChild(el('span', null, label));
