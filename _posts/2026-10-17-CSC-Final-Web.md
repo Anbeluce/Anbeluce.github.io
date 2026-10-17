@@ -21,15 +21,16 @@ image:
 ![DesWeb01](/assets/img/posts/web01.jpg)
 
 ## Recon
-
-Trang chủ có comment HTML lộ `/query.php`, `/debug.php`
+Trang chủ web chỉ có 1 bức ảnh nhưng bật F12 lên có đoạn comment HTML lộ 2 đường dẫn khác `/query.php` và `/debug.php`
 ```html
 <!-- <a href="/query.php">Query</a>
     <a href="/debug.php">Debug</a> -->
 ```
-Apache chặn truy cập trực tiếp `query.php`,`debug.php` -> Thêm `/` ở cuối để lách
+Khi thử truy cập thử vào `query.php`,`debug.php` thì bị Apache chặn truy cập bằng tên file trực tiếp nên bị trả lỗi **403 Forbidden** 
+Sau khi `/` ở cuối (INFO_PATH) để lách thì thành công
 
-Truy cập `/debug.php/?debug=true` lộ `highlight_file()`
+Truy cập cổng debug `/debug.php/?debug=true` phát hiện web in ra toàn bộ `highlight_file()`
+
 ```php
 <?php
 declare(strict_types=1);
@@ -179,17 +180,20 @@ try {
 ```
 Thông tin quan trọng
 - `SESSION_SEED = '1a2b3czzPk'`
-- In **FLAG** khi `forward_permutation(cookie) == session_target(CURRENT_USER)`
+- Hàm Crypto
+- Logic in **FLAG** khi `forward_permutation(cookie) == session_target(CURRENT_USER)`
+Mấu chốt để lấy được **FLAG** là phải kiếm được chuỗi `CURRENT_USER`
 
-Trang `/query.php` có thể inject tham số `order`, trang luôn trả về `200` hoặc `500` và không hiển thị lỗi -> **blind boolean oracle**
+Trang `/query.php` trả về bảng Invoice search và có 2 tham số `search` và `order` tuy nhiên chỉ có thể inject tham số `order` và trang luôn trả về `200` hoặc `500` và không hiển thị lỗi nên hướng đi khả thi nhất là **blind boolean oracle** để lấy được `CURRENT_USER` trong database
 
 ## Khai thác
-### Oracle payload
-Xây oracle dùng `CASE WHEN...THEN...ELSE...END`, điều kiện đúng sinh lỗi, sai thì không
-- Instance dùng `sql_mode` lỏng nên khi tràn số hoặc null sẽ nuốt lỗi và trả về `200` nên dùng REGEXP để tạo ngòi nổ **ReDoS** khiến vượt số lượng giới hạn số bước của regex gây lỗi `500`
-- `order` có bộ lọc kí tự như `=,(,),...` sử dụng `hex literal`,`REGEXP`, `BETWEEN`, `COLLATE` để lách
-- `CURRENT_USER` là hằng, so với hằng khác thì bị **const-fold** -> **ReDoS** không nổ -> luôn 200 (dù điều kiện đúng hay sai) -> oracle chết. Thêm cột `name` vào điều kiện để ép MySQL `eval per-row` lúc chạy phá **const-fold** -> **ReDoS** mới nổ -> đúng 500, sai 200
-- `COLLATE utf8mb4_bin` để so sánh theo byte
+### Blind Boolean Oracle
+
+Mình dùng điều kiện `CASE WHEN...THEN...ELSE...END` đề inject vào `order`. Tuy nhiên có 1 vài vấn đề:
+- Instance dùng `sql_mode` lỏng nên khi tràn số hoặc null sẽ nuốt lỗi và trả về `200` để có thể gây lỗi `500` cần gây **catastrophic backtracking** bằng cách dùng REGEXP để tạo **ReDoS** ép regex engine phải thử ~2²⁸ cách chia nhóm -> chạm giới hạn số bước -> MySQL **ném lỗi runtime** -> PHP catch -> `500`
+- Tham số `order` có bộ lọc kí tự như `=,(,),...` nên mình dùng `hex literal`,`REGEXP`, `BETWEEN`, `COLLATE utf8mb4_bin` (so sánh bytes) để lách
+- MySQL có cơ chế **const-fold** cho nên `CURRENT_USER` là hằng khi so với hằng khác thì biểu thức bị biến thành 1 giá trị cố định -> **ReDoS** không nổ -> luôn 200 (dù điều kiện đúng hay sai) -> vô dụng. Để khắc phục điểm này mình thêm cột `name` vào điều kiện để ép MySQL `eval per-row` lúc chạy phá **const-fold** -> **ReDoS** mới nổ -> đúng 500, sai 200
+
 
 **PAYLOAD ORACLE**
 
@@ -199,6 +203,9 @@ CASE WHEN CURRENT_USER BETWEEN name COLLATE utf8mb4_bin AND 0x<hex>7f7f7f7f7f7f7
 
 `<hex>` là byte đang đoán, 20 byte `7f` theo sau là phần đệm để byte đang đoán luôn là byte quyết định trong so sánh BETWEEN.
 
+Payload này dùng **binary search** để so sánh từng byte đang đoán nếu đúng thì thực thi đoạn ReDoS gây lỗi `500` cho đến kí tự cuối
+
+Sử dụng python để tìm đủ chuỗi `CURRENT_USER`
 
 **FILE PYTHON EXTRACT CURRENT_USER**
 
@@ -243,7 +250,7 @@ print("CURRENT_USER =", user.decode())
 Từ source bị lộ biết rằng `forward_permutation(token) == session_target(CURRENT_USER)` 
 - `session_target(user) = HMAC-SHA256(SEED, "SQL1/TARGET\0"+len+user)[:16]` đây là chuỗi ta có thể tính được vì có `SEED` và `user`
 - `forward_permutation` là hàm khả nghịch
--> **token** = `inverse_permutation( session_target(CURRENT_USER) )`
+-> **token** = `inverse_permutation(session_target(CURRENT_USER))`
 
 **FILE PYTHON INVERSE**
 ```python
