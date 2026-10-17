@@ -163,12 +163,6 @@ paginate: 5
 # The base URL of your site
 baseurl: ""
 
-# Admin dashboard (jekyll-admin) › http://localhost:4000/admin — only works with `jekyll serve`
-jekyll_admin:
-  homepage: "posts"
-  hidden_links:
-    - collections
-
 # ------------ The following options are not recommended to be modified ------------------
 
 kramdown:

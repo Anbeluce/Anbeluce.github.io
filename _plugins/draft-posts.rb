@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 #
-# Pages CMS writes a simple "draft" checkbox (safe default: unchecked = published,
-# since that's how an untouched checkbox starts). Drop any post marked `draft: true`
-# from the posts collection, the same way Jekyll's own `published: false` would.
+# Drop any post marked `draft: true` in its front matter from the posts
+# collection, the same way Jekyll's own `published: false` would.
 #
 # `published: false` can't be set from a post_init hook: Jekyll checks
 # document.published? right after Document#read, inside Collection#read_document,

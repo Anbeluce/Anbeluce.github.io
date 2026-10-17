@@ -1,4 +1,4 @@
-# Online status shown under the tagline in the sidebar (editable in Pages CMS → "Trạng thái online").
+# Online status shown under the tagline in the sidebar.
 enabled: true
 
 github:

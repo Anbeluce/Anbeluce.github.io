@@ -5,6 +5,6 @@
   icon: fas fa-pen-nib
   category: Getting Started
   description: >-
-    Hướng dẫn đăng bài trên blog: dùng dashboard Pages CMS hoặc tạo file
-    Markdown, cùng các định dạng có thể dùng trong bài.
+    Hướng dẫn tạo file để đăng bài trên blog, cùng các định dạng
+    Markdown có thể dùng trong bài.
   image: /assets/img/posts/getting-started.svg

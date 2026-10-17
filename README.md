@@ -1,6 +1,6 @@
 # My Blog
 
-Blog Jekyll dùng theme [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) (MIT), tùy biến tông vàng + ảnh nền.
+Blog Jekyll dùng theme [Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) (MIT), tùy biến tông vàng + ảnh nền. Viết và sửa bài trực tiếp bằng file (IDE/git) — không dùng dashboard admin nào.
 
 ## Tùy biến chính
 
@@ -9,12 +9,39 @@ Blog Jekyll dùng theme [Chirpy](https://github.com/cotes2020/jekyll-theme-chirp
 | `_config.yml` | Tên site, tagline, avatar, timezone, social, `theme_mode: dark`, `paginate` |
 | `_includes/metadata-hook.html` | Toàn bộ CSS tùy biến (màu vàng chủ đạo ở `--color-primary`, ảnh nền + lớp phủ, hover nút/tag/card, nav active, callout `<aside>`) |
 | `_layouts/home.html` | Trang chủ: card ghim danh mục, card có ảnh bìa + viền xanh |
+| `_data/theme.yml` | Tên blog, tagline, avatar, ảnh nền, độ phủ, màu chủ đạo/phụ, font — đọc bởi `_plugins/theme-settings.rb` |
 | `_data/pinned_categories.yml` | Các card "Pinned Category" ở đầu trang chủ |
 | `_data/contact.yml` | Icon mạng xã hội ở cuối sidebar |
+| `_data/status.yml` | Khung trạng thái online (GitHub activity, Discord presence) ở sidebar |
 | `_tabs/about.md` | Trang About |
 | `assets/img/` | `avatar.svg`, `bg/bg.svg`, ảnh bìa trong `posts/` — thay bằng ảnh của bạn |
 
-Bài viết mới: tạo file `_posts/YYYY-MM-DD-ten-bai.md` với front matter `title`, `description`, `date`, `categories`, `tags`, và tuỳ chọn `image.path`.
+## Đăng bài mới
+
+Tạo file `_posts/YYYY-MM-DD-ten-bai.md`{: .filepath }:
+
+```markdown
+---
+title: Tiêu đề bài
+description: Mô tả ngắn hiện trên trang chủ
+date: 2026-10-20 20:00:00 +0700   # luôn ghi kèm +0700 (giờ Việt Nam)
+categories: [CTF Writeups]
+tags: [ctf, forensics]
+pin: false      # true = ghim lên đầu trang chủ
+draft: false    # true = ẩn bài khỏi toàn bộ site, không build ra trang
+image:
+  path: /assets/img/posts/ten-anh.png
+  alt: Mô tả ảnh
+---
+
+Nội dung bài viết bằng Markdown...
+```
+
+**Quan trọng khi viết:** giữa các đoạn văn, trước/sau bảng, trước/sau khối code phải có **một dòng trống**. Thiếu dòng trống, Markdown sẽ gộp nhiều đoạn/dòng bảng thành một khối lộn xộn — xem [_posts/2026-10-13-huong-dan-dang-bai.md](_posts/2026-10-13-huong-dan-dang-bai.md) để biết cú pháp đầy đủ (khung ghi chú màu, callout, bảng, link, ảnh).
+
+**Kiểm tra link trước khi push:** `[chữ](duong-dan)` mà `duong-dan` không phải URL thật (thiếu `https://`, hoặc trỏ tới file không có trên site) sẽ làm build GitHub Actions fail (bước `htmlproofer` kiểm tra mọi link nội bộ). Muốn nhắc tới tên file mà không link đi đâu, dùng `` `ten-file.py` `` (code, không phải link).
+
+Commit và push lên `main`, GitHub Actions tự build và deploy, khoảng 1–2 phút sau lên site.
 
 ## Chạy local (Docker, không cần cài Ruby)
 
@@ -22,30 +49,7 @@ Bài viết mới: tạo file `_posts/YYYY-MM-DD-ten-bai.md` với front matter 
 docker run --rm -it -v "${PWD}:/site" -v blog-gems:/usr/local/bundle -w /site -p 4000:4000 ruby:3.3 bash -c "bundle install && bundle exec jekyll serve -H 0.0.0.0 --force_polling"
 ```
 
-Mở http://localhost:4000
-
-## Dashboard admin online (Pages CMS)
-
-Sau khi đã push lên GitHub:
-
-1. Vào https://app.pagescms.org, bấm **Sign in with GitHub**, cấp quyền cho repo `<username>.github.io`.
-2. Chọn repo và nhánh `main`. Menu bên trái gồm Bài viết, Trang About, Card ghim trang chủ, Icon mạng xã hội và Media.
-3. Bấm **Lưu** sẽ tạo một commit vào repo. GitHub Actions tự build lại, khoảng 1–2 phút sau site được cập nhật (theo dõi ở tab **Actions** của repo).
-
-Cấu hình nằm trong `.pages.yml`.
-
-## Dashboard admin local (jekyll-admin)
-
-Khi server local đang chạy, mở http://localhost:4000/admin để:
-
-- **Posts**: viết bài mới, sửa, xoá bài (soạn Markdown, điền front matter như title, date, categories, tags, image)
-- **Pages**: sửa các trang như About, Categories...
-- **Data Files**: sửa `_data/*.yml` (card ghim trang chủ, icon mạng xã hội)
-- **Static Files**: upload ảnh vào `assets/`
-- **Configuration**: sửa `_config.yml` (sửa xong cần khởi động lại server)
-
-Dashboard ghi trực tiếp vào file trong thư mục này. Sau đó commit và push để site trên GitHub Pages được cập nhật.
-Dashboard **chỉ chạy ở local** và không xuất hiện trên site đã deploy.
+Mở http://localhost:4000 để xem trước khi push — phát hiện lỗi build hoặc link hỏng sớm hơn là chờ GitHub Actions.
 
 ## Deploy lên GitHub Pages
 

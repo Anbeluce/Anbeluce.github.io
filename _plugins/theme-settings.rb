@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #
-# Let _data/theme.yml (edited in Pages CMS) override site identity from _config.yml,
-# so the CMS never has to rewrite _config.yml itself.
+# Let _data/theme.yml override site identity from _config.yml, so changing
+# the blog's name/tagline/avatar/author/colors/fonts never touches _config.yml.
 
 Jekyll::Hooks.register :site, :post_read do |site|
   theme = site.data["theme"]
