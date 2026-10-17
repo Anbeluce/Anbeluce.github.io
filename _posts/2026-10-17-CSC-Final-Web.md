@@ -1,19 +1,24 @@
 ---
 title: CSC 2026 Final - Web Write Up
-description: Write up WEB01, WEB02 of CSC 2026
+description: Write up Web of CSC 2026
 date: 2026-10-17 13:34:00 +0700
 categories:
   - CSCV2026
 tags: [CTF, Web-Exploit]
 pin: false
 draft: false
+image:
+    path: /assets/img/posts/cscv-banner.png
+    hide_on_post: true
 ---
-# Baby SQL1
-
+# WEB01 - Baby SQL1
 **FLAG:** `CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}`
 
 **CURRENT_USER (DB):** `svatttadm1n001@%`
-![DesWeb01](assets/img/posts/web01.jpg)
+
+**CUSTOM_SESSION** `08b72d5b3d0ef28c5d01fc8b474883f1`
+
+![DesWeb01](/assets/img/posts/web01.jpg)
 
 ## Recon
 
@@ -172,16 +177,18 @@ try {
     exit('Internal Server Error');
 }
 ```
-bao gồm `SESSION_SEED = '1a2b3czzPk'` Crypto và sẽ in ra Flag khi `forward_permutation(cookie) == session_target(CURRENT_USER)`
+Thông tin quan trọng
+- `SESSION_SEED = '1a2b3czzPk'`
+- In **FLAG** khi `forward_permutation(cookie) == session_target(CURRENT_USER)`
 
 Trang `/query.php` có thể inject tham số `order`, trang luôn trả về `200` hoặc `500` và không hiển thị lỗi -> **blind boolean oracle**
 
 ## Khai thác
 ### Oracle payload
 Xây oracle dùng `CASE WHEN...THEN...ELSE...END`, điều kiện đúng sinh lỗi, sai thì không
-- Instance dùng `sql_mode` lỏng nên khi tràn số hoặc null sẽ nuốt lỗi và trả về `200` nên dùng REGEXP để gây ReDoS khiến vượt số lượng giới hạn số bước của regex gây lỗi `500`
+- Instance dùng `sql_mode` lỏng nên khi tràn số hoặc null sẽ nuốt lỗi và trả về `200` nên dùng REGEXP để tạo ngòi nổ **ReDoS** khiến vượt số lượng giới hạn số bước của regex gây lỗi `500`
 - `order` có bộ lọc kí tự như `=,(,),...` sử dụng `hex literal`,`REGEXP`, `BETWEEN`, `COLLATE` để lách
-- `CURRENT_USER` là hằng, so với hằng khác thì bị **const-fold** -> ReDoS không nổ -> luôn 200 (dù điều kiện đúng hay sai) -> oracle chết. Thêm cột `name` vào điều kiện để ép MySQL `eval per-row` lúc chạy (phá **const-fold**) -> ReDoS mới nổ -> đúng 500, sai 200
+- `CURRENT_USER` là hằng, so với hằng khác thì bị **const-fold** -> **ReDoS** không nổ -> luôn 200 (dù điều kiện đúng hay sai) -> oracle chết. Thêm cột `name` vào điều kiện để ép MySQL `eval per-row` lúc chạy phá **const-fold** -> **ReDoS** mới nổ -> đúng 500, sai 200
 - `COLLATE utf8mb4_bin` để so sánh theo byte
 
 **PAYLOAD ORACLE**
@@ -238,6 +245,7 @@ Từ source bị lộ biết rằng `forward_permutation(token) == session_targe
 - `forward_permutation` là hàm khả nghịch
 -> **token** = `inverse_permutation( session_target(CURRENT_USER) )`
 
+**FILE PYTHON INVERSE**
 ```python
 import hmac, hashlib, struct
 SEED=b"1a2b3czzPk"; R=24
