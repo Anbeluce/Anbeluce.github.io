@@ -12,6 +12,7 @@ image:
     hide_on_post: true
 ---
 # WEB01 - Baby SQL1
+
 **FLAG:** `CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}`
 
 **CURRENT_USER (DB):** `svatttadm1n001@%`
@@ -21,13 +22,15 @@ image:
 ![DesWeb01](/assets/img/posts/web01.jpg)
 
 ## Recon
+![Index.php](/assets/img/posts/web01-index.jpg)
 Trang chủ web chỉ có 1 bức ảnh nhưng bật F12 lên có đoạn comment HTML lộ 2 đường dẫn khác `/query.php` và `/debug.php`
 ```html
 <!-- <a href="/query.php">Query</a>
     <a href="/debug.php">Debug</a> -->
 ```
 Khi thử truy cập thử vào `query.php`,`debug.php` thì bị Apache chặn truy cập bằng tên file trực tiếp nên bị trả lỗi **403 Forbidden** 
-Sau khi `/` ở cuối (INFO_PATH) để lách thì thành công
+
+Sau khi thêm dấu `/` ở cuối (INFO_PATH) để lách thì thành công bypass được
 
 Truy cập cổng debug `/debug.php/?debug=true` phát hiện web in ra toàn bộ `highlight_file()`
 
@@ -182,8 +185,9 @@ Thông tin quan trọng
 - `SESSION_SEED = '1a2b3czzPk'`
 - Hàm Crypto
 - Logic in **FLAG** khi `forward_permutation(cookie) == session_target(CURRENT_USER)`
-Mấu chốt để lấy được **FLAG** là phải kiếm được chuỗi `CURRENT_USER`
 
+Mấu chốt để lấy được **FLAG** là phải kiếm được chuỗi `CURRENT_USER`
+![query.php](/assets/img/posts/web01-query.jpg)
 Trang `/query.php` trả về bảng Invoice search và có 2 tham số `search` và `order` tuy nhiên chỉ có thể inject tham số `order` và trang luôn trả về `200` hoặc `500` và không hiển thị lỗi nên hướng đi khả thi nhất là **blind boolean oracle** để lấy được `CURRENT_USER` trong database
 
 ## Khai thác
@@ -247,6 +251,7 @@ print("CURRENT_USER =", user.decode())
 #result: svatttadm1n001@%
 ```
 ### Forge cookie
+
 Từ source bị lộ biết rằng `forward_permutation(token) == session_target(CURRENT_USER)` 
 - `session_target(user) = HMAC-SHA256(SEED, "SQL1/TARGET\0"+len+user)[:16]` đây là chuỗi ta có thể tính được vì có `SEED` và `user`
 - `forward_permutation` là hàm khả nghịch
@@ -275,3 +280,87 @@ curl -sk https://web04-da11455de712.59.153.245.188.sslip.io/debug.php/ \
 
 #CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}
 ```
+
+# WEB02 - Northstar
+
+![Web02Des](/assets/img/posts/web02-des.jpg)
+
+## Recon
+Đây là 1 bài web blackbox gồm có 2 site, 1 site là classic, 1 site v2. Sau khi trải nghiệm như 1 người dùng mình thấy site classic sau khi tạo tài khoản thì bị `redirect` trực tiếp lại trang `/login`, đối với site v2 có chức năng `migration` data từ site classic.
+
+Site classic sử dụng **GraphQL**, trong `/assets/legacy.js` có các mutation:
+
+```javascript
+  bindAccountForm('#login-form', 'login', 'mutation($identifier:String!,$password:String!){login(identifier:$identifier,password:$password){success message redirect}}');
+  bindAccountForm('#register-form', 'register', 'mutation($email:String!,$username:String!,$password:String!,$confirmPassword:String!,$session:String!){register(email:$email,username:$username,password:$password,confirmPassword:$confirmPassword,session:$session){success message redirect}}');
+  bindAccountForm('#profile-form', 'updateProfile', 'mutation($firstName:String!,$lastName:String!){updateProfile(firstName:$firstName,lastName:$lastName){success message}}');
+```
+
+Để ý kĩ thì `checkEmail(email){available message session}` lại trả về `session` — đây là điểm rất lạ, một hàm chỉ để kiểm tra email trống mà lại phát ra token thì rất đáng nghi.
+
+**GraphQL** tắt introspection nhưng vẫn leak field gần đúng (suggestion "Did you mean …?" — đây là hành vi **mặc định** của graphql-js, độc lập với introspection). Lợi dụng cái này, mình gõ tên theo convention `update*`/`account*` để dò field ẩn:
+
+```bash
+# gõ gần đúng, server tự khai field thật
+mutation{updatePassword}   -> Did you mean "updateProfile" or "updateUserPassword"?
+query{account}             -> Did you mean "accountDirectory"?
+```
+
+Enumerate thêm được:
+
+```graphql
+updateUserPassword(oldPassword: String, newPassword: String!, confirmNew: String!): ActionResult!
+accountDirectory(keyword: String!): [DirectoryEntry!]!   # DirectoryEntry { id username email displayName }
+```
+
+> Mẹo lấy chữ ký arg không cần introspection: gọi field thiếu arg → server báo *"argument X of type T! is required"*; gõ arg sai → *"Unknown argument"*; sai kiểu → *"String cannot represent …"*; sai field con → lộ tên type trả về.
+
+Điểm đáng quan tâm ở `updateUserPassword` là `oldPassword` **optional** nên ta có thể đổi mà không cần `oldPassword`
+
+Site v2 sử dụng **REST**:
+
+| API                                             | Kết quả                                              |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| `/register`, `/login`, `/logout`                | access_token (JWT)                                   |
+| `migration/verify`                              | {username, legacy_user_id, migration_ticket}         |
+| `migration/confirm`                             | {legacy_user_id, migration_ticket, security_answer?} |
+| `admin/get-flag-1iduhx` (chỉ cần Bearer header) | **FLAG**                                             |
+
+-> Để lấy được **FLAG** cần migration tài khoản admin từ site classic qua site v2.
+
+## Khai thác
+
+Site classic có để lộ mail **support** `support@ctf.local` lợi dụng điều đó dùng `checkEmail` để lấy **token**
+
+![](/assets/img/posts/web02-support.jpg)
+
+Sau khi có **token** dùng mutation `updateUserPassword` để đặt mật khẩu mới cho tài khoản **support**
+
+![](/assets/img/posts/web02-set_pass_support.jpg)
+
+Có tài khoản **support** tiếp tục thực hiện migration ở site v2, phát hiện manh mỗi lộ email của **administrator** ở trong `message` của **support**
+
+![](/assets/img/posts/web02-get_mail_admin.jpg)
+
+Tiếp tục đặt lại mật khẩu như tài khoản `support` và migration ở site v2 tuy nhiên tài khoản **administrator** lại yêu câu thêm ngày tháng năm sinh
+
+![](/assets/img/posts/web02-migration_admin.jpg)
+
+`accountDirectory` thực hiện truy vấn database nhưng phải có token **administrator** -> Kết hợp UNION để Inject SQL
+
+![](/assets/img/posts/web02-test_sql.jpg)
+
+Mình kiểm tra xem có quyền gì ở database và phát hiện có quyền **UPDATE** `date_of_birth` nên mình mình **SET** luôn ngày sinh **administrator**
+
+![](/assets/img/posts/web02-check_permision_sql.jpg)
+
+![](/assets/img/posts/web02-set_birth_admin.jpg)
+
+Trở lại migration tài khoản administrator, mình phát hiện bấm ở UI nó không gửi đi `security_answer` nên phải dùng **BurpSuite** thay thế
+
+![](/assets/img/posts/web02-migration_admin_2.jpg)
+
+**FLAG**
+
+![](/assets/img/posts/web02-get_flag.jpg)
+
