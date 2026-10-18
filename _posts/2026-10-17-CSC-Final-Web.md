@@ -15,10 +15,6 @@ image:
 
 **FLAG:** `CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}`
 
-**CURRENT_USER (DB):** `svatttadm1n001@%`
-
-**CUSTOM_SESSION** `08b72d5b3d0ef28c5d01fc8b474883f1`
-
 ![DesWeb01](/assets/img/posts/web01.jpg)
 
 ## Recon
@@ -282,6 +278,8 @@ curl -sk https://web04-da11455de712.59.153.245.188.sslip.io/debug.php/ \
 ```
 
 # WEB02 - Northstar
+
+**FLAG:** `CSCV2026{le64cy_id3nti7y_Mi6r47i0N_c0MPlet3}`
 
 ![Web02Des](/assets/img/posts/web02-des.jpg)
 
