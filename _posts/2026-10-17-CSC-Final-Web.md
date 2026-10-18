@@ -11,13 +11,13 @@ image:
     path: /assets/img/posts/cscv-banner.png
     hide_on_post: true
 ---
-# WEB01 - Baby SQL1
+## WEB01 - Baby SQL1
 
 **FLAG:** `CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}`
 
 ![DesWeb01](/assets/img/posts/web01.jpg)
 
-## Recon
+### Recon
 ![Index.php](/assets/img/posts/web01-index.jpg)
 Trang chủ web chỉ có 1 bức ảnh nhưng bật F12 lên có đoạn comment HTML lộ 2 đường dẫn khác `/query.php` và `/debug.php`
 ```html
@@ -186,8 +186,8 @@ Mấu chốt để lấy được **FLAG** là phải kiếm được chuỗi `C
 ![query.php](/assets/img/posts/web01-query.jpg)
 Trang `/query.php` trả về bảng Invoice search và có 2 tham số `search` và `order` tuy nhiên chỉ có thể inject tham số `order` và trang luôn trả về `200` hoặc `500` và không hiển thị lỗi nên hướng đi khả thi nhất là **blind boolean oracle** để lấy được `CURRENT_USER` trong database
 
-## Khai thác
-### Blind Boolean Oracle
+### Khai thác
+#### Blind Boolean Oracle
 
 Mình dùng điều kiện `CASE WHEN...THEN...ELSE...END` đề inject vào `order`. Tuy nhiên có 1 vài vấn đề:
 - Instance dùng `sql_mode` lỏng nên khi tràn số hoặc null sẽ nuốt lỗi và trả về `200` để có thể gây lỗi `500` cần gây **catastrophic backtracking** bằng cách dùng REGEXP để tạo **ReDoS** ép regex engine phải thử ~2²⁸ cách chia nhóm -> chạm giới hạn số bước -> MySQL **ném lỗi runtime** -> PHP catch -> `500`
@@ -246,7 +246,7 @@ print("CURRENT_USER =", user.decode())
 
 #result: svatttadm1n001@%
 ```
-### Forge cookie
+#### Forge cookie
 
 Từ source bị lộ biết rằng `forward_permutation(token) == session_target(CURRENT_USER)` 
 - `session_target(user) = HMAC-SHA256(SEED, "SQL1/TARGET\0"+len+user)[:16]` đây là chuỗi ta có thể tính được vì có `SEED` và `user`
@@ -277,13 +277,13 @@ curl -sk https://web04-da11455de712.59.153.245.188.sslip.io/debug.php/ \
 #CSCV2026{Reg3xp_oraCle_7H3n_F0Rge_7he_5e5510n}
 ```
 
-# WEB02 - Northstar
+## WEB02 - Northstar
 
 **FLAG:** `CSCV2026{le64cy_id3nti7y_Mi6r47i0N_c0MPlet3}`
 
 ![Web02Des](/assets/img/posts/web02-des.jpg)
 
-## Recon
+### Recon
 Đây là 1 bài web blackbox gồm có 2 site, 1 site là classic, 1 site v2. Sau khi trải nghiệm như 1 người dùng mình thấy site classic sau khi tạo tài khoản thì bị `redirect` trực tiếp lại trang `/login`, đối với site v2 có chức năng `migration` data từ site classic.
 
 Site classic sử dụng **GraphQL**, trong `/assets/legacy.js` có các mutation:
@@ -326,7 +326,7 @@ Site v2 sử dụng **REST**:
 
 -> Để lấy được **FLAG** cần migration tài khoản admin từ site classic qua site v2.
 
-## Khai thác
+### Khai thác
 
 Site classic có để lộ mail **support** `support@ctf.local` lợi dụng điều đó dùng `checkEmail` để lấy **token**
 
